@@ -1,0 +1,101 @@
+package DAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import ENTIDADES.Produto;
+
+public class ProdutoDao {
+    private static Connection con;
+    private static ResultSet rs;
+    private static PreparedStatement ps;
+    public static void start(Connection conn){
+        con = conn;
+    }
+    public static int insereProduto(Produto produto){
+         /*-- -----------------------------------------------------
+-- Table `outlet`.`produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `outlet`.`produto` (
+  `cod` INT NOT NULL,
+  `descricao` VARCHAR(100) NOT NULL,
+  `marca` VARCHAR(45) NULL,
+  `preco` DECIMAL(8,2) NOT NULL,
+  `quantidadeestoque` INT NOT NULL,
+  PRIMARY KEY (`cod`))
+ENGINE = InnoDB; */
+        int vl = 0;
+        try {
+            String sql = "INSERT INTO produto(cod,descricao,marca,preco) values (?,?,?,?)";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,produto.getCod());
+            ps.setString(2,produto.getDescricao());
+            ps.setString(3,produto.getMarca());
+            ps.setString(4,produto.getMarca());
+            ps.setDouble(5,produto.getPreco());
+            
+            vl += ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao inserir produto!\n"+ e.getMessage());
+        }
+        return vl;
+    }
+    public static int deleta(Produto produto){
+        int vl = 0;
+        try {
+            String sql = "DELETE FROM produto WHERE cod = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,produto.getCod());            
+            vl += ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao deletar produto!\n"+ e.getMessage());
+        }
+        return vl;
+    }
+    public static int atualiza(Produto produto){
+        int vl = 0;
+        try {
+            String sql = "UPDATE produto SET descricao=?,marca=?,preco=? WHERE cod = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,produto.getDescricao());
+            ps.setString(2,produto.getMarca());
+            ps.setString(3,produto.getMarca());
+            ps.setDouble(4,produto.getPreco());
+            ps.setString(5,produto.getCod());
+            
+            vl += ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao inserir produto!\n"+ e.getMessage());
+        }
+        return vl;
+    }
+    public static Produto busca(String cod){
+        Produto produto = new Produto();
+        
+        try {
+            String sql =  "SELECT cod,descricao,marca,preco FROM produto WHERE cod = ?";
+            
+            ps = con.prepareStatement(sql);
+            ps.setString(1,cod);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                produto.setCod(rs.getString("cod"));
+                produto.setDescricao(rs.getString("descricao"));
+                produto.setMarca(rs.getString("marca"));
+                produto.setPreco(rs.getDouble("preco"));
+                produto.setQuantidadeestoque(rs.getInt("quantidadeestoque"));
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar Produto!\n"+ e.getMessage());
+        }
+        return produto;
+    }
+
+}
