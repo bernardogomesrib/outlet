@@ -67,7 +67,7 @@ ENGINE = InnoDB;
     public static int atualiza(Venda venda){
         int vl = 0;
         try {
-            String sql = "UPTADE venda SET data=?,formapagamento=?,total=?,pedido_id=?) WHERE numero = ?";
+            String sql = "UPDATE venda SET data=?,formapagamento=?,total=?,pedido_id=?) WHERE numero = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, venda.getData(true));
             ps.setString(2, venda.getFormapagamento());
