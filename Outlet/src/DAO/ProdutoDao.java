@@ -29,13 +29,13 @@ CREATE TABLE IF NOT EXISTS `outlet`.`produto` (
 ENGINE = InnoDB; */
         int vl = 0;
         try {
-            String sql = "INSERT INTO produto(cod,descricao,marca,preco) values (?,?,?,?)";
+            String sql = "INSERT INTO produto(cod,descricao,marca,preco,quantidadeestoque) values (?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1,produto.getCod());
             ps.setString(2,produto.getDescricao());
             ps.setString(3,produto.getMarca());
-            ps.setString(4,produto.getMarca());
-            ps.setDouble(5,produto.getPreco());
+            ps.setDouble(4,produto.getPreco());
+            ps.setInt(5, produto.getQuantidadeestoque());
             
             vl += ps.executeUpdate();
             
@@ -60,12 +60,12 @@ ENGINE = InnoDB; */
     public static int atualiza(Produto produto){
         int vl = 0;
         try {
-            String sql = "UPDATE produto SET descricao=?,marca=?,preco=? WHERE cod = ?";
+            String sql = "UPDATE produto SET descricao=?,marca=?,preco=?,quantidadeestoque=? WHERE cod = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1,produto.getDescricao());
-            ps.setString(2,produto.getMarca());
-            ps.setString(3,produto.getMarca());
-            ps.setDouble(4,produto.getPreco());
+            ps.setString(2,produto.getMarca());            
+            ps.setDouble(3,produto.getPreco());
+            ps.setInt(4, produto.getQuantidadeestoque());
             ps.setString(5,produto.getCod());
             
             vl += ps.executeUpdate();
@@ -79,7 +79,7 @@ ENGINE = InnoDB; */
         Produto produto = new Produto();
         
         try {
-            String sql =  "SELECT cod,descricao,marca,preco FROM produto WHERE cod = ?";
+            String sql =  "SELECT cod,descricao,marca,preco,quantidadeestoque FROM produto WHERE cod = ?";
             
             ps = con.prepareStatement(sql);
             ps.setString(1,cod);
