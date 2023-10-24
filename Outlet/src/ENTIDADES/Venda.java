@@ -44,7 +44,7 @@ ENGINE = InnoDB;
     public void setData(String data,boolean invertido) {
         if(invertido){
             String[] dividido = data.split("-");
-            data = dividido[2]+"/"+dividido[1]+"/"+dividido[0];            
+            this.data = dividido[2]+"/"+dividido[1]+"/"+dividido[0];            
         }else{
             this.data = data;
         }

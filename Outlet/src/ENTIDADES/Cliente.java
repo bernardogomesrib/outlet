@@ -36,7 +36,7 @@ public String getDatanascimento(boolean invertido) {
 public void setDatanascimento(String datanascimento,boolean invertido) {
     if(invertido){
         String[] dividido = datanascimento.split("-");
-        datanascimento = dividido[2]+"/"+dividido[1]+"/"+dividido[0];            
+        this.datanascimento = dividido[2]+"/"+dividido[1]+"/"+dividido[0];            
     }else{
         this.datanascimento = datanascimento;
     }
