@@ -28,6 +28,16 @@ ENGINE = InnoDB;
     private int quantidade;
     private double valor;
     private double subtotal;
+    public Itempedido(){
+      
+    }
+    public Itempedido(String pedido_id,String produto_cod,int quantidade,double valor,double subtotal){
+      this.pedido_id= pedido_id;
+      this.produto_cod = produto_cod;
+      this.quantidade = quantidade;
+      this.subtotal= subtotal;
+
+    }
     public String getPedido_id() {
       return pedido_id;
     }

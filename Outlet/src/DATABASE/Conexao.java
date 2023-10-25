@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Conexao {   
-    private static final String url = "jdbc:mysql://localhost:3306/outlet";
+    private static final String url = "jdbc:mysql://localhost:3306/";
     private static final String user = "root";
     private static final String pass = "";
 
@@ -19,7 +19,13 @@ public class Conexao {
                 PreparedStatement prep;
                 conectar = DriverManager.getConnection(url, user, pass);
                 System.out.println("Conexão com o banco de dados realizada com sucesso!");
-                String sql ="CREATE TABLE IF NOT EXISTS outlet.cliente (cpf CHAR(14) NOT NULL PRIMARY KEY, nome VARCHAR(100) NOT NULL, datanascimento DATE NOT NULL, email VARCHAR(45) NOT NULL UNIQUE, telefone CHAR(15) NOT NULL);";
+                String sql ="CREATE DATABASE IF NOT EXISTS outlet";
+                prep= conectar.prepareStatement(sql);
+                prep.execute(sql);
+                sql ="USE outlet";
+                prep= conectar.prepareStatement(sql);
+                prep.execute();
+                sql ="CREATE TABLE IF NOT EXISTS outlet.cliente (cpf CHAR(14) NOT NULL PRIMARY KEY, nome VARCHAR(100) NOT NULL, datanascimento DATE NOT NULL, email VARCHAR(45) NOT NULL UNIQUE, telefone CHAR(15) NOT NULL);";
                 prep= conectar.prepareStatement(sql);
                 prep.execute();
                 sql = "CREATE TABLE IF NOT EXISTS outlet.pedido (id INT NOT NULL, data DATETIME NOT NULL, cliente_cpf CHAR(14) NOT NULL, PRIMARY KEY (id), INDEX fk_pedido_cliente_idx (cliente_cpf ASC), CONSTRAINT fk_pedido_cliente FOREIGN KEY (cliente_cpf) REFERENCES outlet.cliente (cpf) ON DELETE NO ACTION ON UPDATE NO ACTION) ENGINE = InnoDB;";
