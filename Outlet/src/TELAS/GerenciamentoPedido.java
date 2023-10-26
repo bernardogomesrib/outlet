@@ -54,7 +54,7 @@ public class GerenciamentoPedido extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -71,7 +71,7 @@ public class GerenciamentoPedido extends JFrame {
 			}
 		});
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -404,11 +404,11 @@ public class GerenciamentoPedido extends JFrame {
 	public void defineTabela(){
 		DefaultTableModel model = (DefaultTableModel) table.getModel(); //
 		model.addColumn("Descrição"); // adiciona a coluna 0
-		model.addColumn("Quantidade"); // adiciona a coluna 1
+		model.addColumn("Qnt"); // adiciona a coluna 1
 		model.addColumn("Preço"); // adiciona a coluna 2
 		table.getColumnModel().getColumn(0).setPreferredWidth(330); // define a largura da coluna 0
-		table.getColumnModel().getColumn(1).setPreferredWidth(60); // define a largura da coluna 1
-		table.getColumnModel().getColumn(2).setPreferredWidth(60);
+		table.getColumnModel().getColumn(1).setPreferredWidth(30); // define a largura da coluna 1
+		table.getColumnModel().getColumn(2).setPreferredWidth(90);
 	}
 	public MaskFormatter Mascara(String Mascara){
         
