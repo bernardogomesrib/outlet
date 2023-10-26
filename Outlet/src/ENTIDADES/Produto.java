@@ -17,6 +17,15 @@ ENGINE = InnoDB; */
     private String marca;
     private double preco;
     private int quantidadeestoque;
+    public Produto(){        
+    }
+    public Produto(String cod,String descricao,String marca,double preco,int quantidadeestoque){
+        this.cod = cod;
+        this.descricao = descricao;
+        this.marca = marca;
+        this.preco = preco;
+        this.quantidadeestoque = quantidadeestoque;        
+    }
     public String getCod() {
         return cod;
     }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import ENTIDADES.Itempedido;
+import ENTIDADES.Produto;
 
 public class ItempedidoDAO {
     private static Connection con;
@@ -87,8 +88,8 @@ ENGINE = InnoDB;
         }
         return vl;
     }
-    public static List<Itempedido> buscaItensDoPedido(String id){
-        Itempedido it = new Itempedido();
+    public static ArrayList<Itempedido> buscaItensDoPedido(String id){
+        
         ArrayList<Itempedido> ls = new ArrayList<Itempedido>();
         try {
             String sql ="SELECT pedido_id,produto_cod,quantidade,valor,subtotal FROM itempedido where pedido_id = ?";
@@ -96,19 +97,14 @@ ENGINE = InnoDB;
             ps.setString(1,id);            
             rs = ps.executeQuery();
             while(rs.next()){
-                it.setPedido_id(rs.getString("pedido_id"));
-                it.setProduto_cod(rs.getString("produto_cod"));
-                it.setQuantidade(rs.getInt("quantidade"));
-                it.setValor(rs.getDouble("valor"));
-                it.setSubtotal(rs.getDouble("subtotal"));
-                ls.add(it);
+                ls.add(new Itempedido(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5)));
             }
             
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao buscar itens do pedido!\n"+ e.getMessage());
         }
 
-        return ls.subList(0, ls.size());
+        return ls;
     }
     public static List<Itempedido> buscaPedidosDoItem(String id){
         Itempedido it = new Itempedido();
@@ -132,5 +128,28 @@ ENGINE = InnoDB;
         }
 
         return ls.subList(0, ls.size());
+    }
+    public static int colocarvarios(ArrayList<Itempedido> itens,ArrayList<Produto> produtos){
+        String sql = "INSERT INTO itempedido(pedido_id,produto_cod,quantidade,valor,subtotal) values";
+        Itempedido item = null;
+        int val = 0;
+        int tamanho =itens.size();
+        for(int i= 0;i<tamanho;i++){
+            item = itens.get(i);
+            if(i == tamanho-1){
+                System.out.println(item.getValor());
+                sql+="("+item.getPedido_id()+","+item.getProduto_cod()+","+item.getQuantidade()+",'"+produtos.get(i).getPreco()+"','"+item.getSubtotal()+"')";
+            }else{
+                sql+="("+item.getPedido_id()+","+item.getProduto_cod()+","+item.getQuantidade()+",'"+produtos.get(i).getPreco()+"','"+item.getSubtotal()+"'),";
+            }
+        }
+        try {
+            ps = con.prepareStatement(sql);
+            val = ps.executeUpdate();
+        } catch (SQLException e) {
+           JOptionPane.showMessageDialog(null, "Erro ao inserir item do pedidos!\n"+ e.getMessage());
+        }
+
+        return val;
     }
 }

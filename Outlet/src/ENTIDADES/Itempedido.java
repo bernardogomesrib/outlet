@@ -36,7 +36,7 @@ ENGINE = InnoDB;
       this.produto_cod = produto_cod;
       this.quantidade = quantidade;
       this.subtotal= subtotal;
-
+      this.valor = valor;
     }
     public String getPedido_id() {
       return pedido_id;
@@ -56,6 +56,10 @@ ENGINE = InnoDB;
     public void setQuantidade(int quantidade) {
       this.quantidade = quantidade;
     }
+    public void setQuantidadenova(int quantidade) {
+      this.quantidade = quantidade;
+      this.subtotal = this.quantidade*this.valor;
+    }
     public double getValor() {
       return valor;
     }
@@ -67,5 +71,11 @@ ENGINE = InnoDB;
     }
     public void setSubtotal(double subtotal) {
       this.subtotal = subtotal;
+    }
+    public void addMaisQuantidade(int quantidad){
+      System.out.println(quantidad);
+      this.quantidade+=quantidad;
+      System.out.println(this.quantidade+" é a quantidade mais "+this.valor);
+      this.subtotal = this.quantidade*this.valor;
     }
 }

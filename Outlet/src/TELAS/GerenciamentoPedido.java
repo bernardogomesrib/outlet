@@ -42,7 +42,7 @@ public class GerenciamentoPedido extends JFrame {
 	private JFormattedTextField tf_cpf;
 	private JFormattedTextField tf_data;
 	private JTextField tf_cod;
-	private JFormattedTextField tf_quantidade;
+	private JTextField tf_quantidade;
 	private JTable table;
 	private Produto produto = new Produto();
 	private Pedido pedido =  new Pedido();
@@ -50,6 +50,7 @@ public class GerenciamentoPedido extends JFrame {
 	private ArrayList<Itempedido> itens = new ArrayList<Itempedido>();
 	private ArrayList<Produto> produtos = new ArrayList<Produto>();
 	private String qnt;
+	private boolean ja_tinha_itens_no_pedido= false;
 	/**
 	 * Launch the application.
 	 */
@@ -97,7 +98,6 @@ public class GerenciamentoPedido extends JFrame {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				pedido.setId(tf_idp.getText());
-				System.out.println(pedido.getId());
 			}
 		});
 		tf_idp.setColumns(10);
@@ -182,7 +182,7 @@ public class GerenciamentoPedido extends JFrame {
 		panel.add(lblQuantidade);
 		lblQuantidade.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		tf_quantidade = new JFormattedTextField(Mascara("##########"));
+		tf_quantidade = new JTextField();
 		tf_quantidade.setBounds(183, 211, 180, 19);
 		panel.add(tf_quantidade);
 		tf_quantidade.addKeyListener(new KeyAdapter() {
@@ -211,7 +211,7 @@ public class GerenciamentoPedido extends JFrame {
 		btnEditar_1.setBounds(245, 257, 117, 25);
 		panel.add(btnEditar_1);
 		
-		JButton btnConcluirCompra = new JButton("Concluir compra");
+		JButton btnConcluirCompra = new JButton("Concluir pedido");
 		btnConcluirCompra.setBounds(12, 362, 164, 25);
 		panel.add(btnConcluirCompra);
 		
@@ -252,10 +252,29 @@ public class GerenciamentoPedido extends JFrame {
 					somas+=itempedido.getSubtotal();
 				}
 				model.addRow(new Object[]{"Total:","",somas});
+				if(ja_tinha_itens_no_pedido){
+					for (Itempedido ite : itens) {
+						ItempedidoDAO.deleta(ite);
+					}
+					if(ItempedidoDAO.colocarvarios(itens,produtos)>=1){
+					JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
+					}
+				}else{
+					if(ItempedidoDAO.colocarvarios(itens,produtos)>=1){
+					JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
+					}
+				}
 			}
 		});
 		btnEditar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int local = procurapeloid(tf_cod.getText());
+				if(local == 99999){
+					JOptionPane.showMessageDialog(null, "não foi encontrado o produto");
+				}else{
+					itens.get(local).setQuantidadenova(Integer.parseInt(tf_quantidade.getText()));
+					preencheouEsvazia(true);
+				}
 			}
 		});
 		btnExcluir_1.addActionListener(new ActionListener() {
@@ -274,12 +293,20 @@ public class GerenciamentoPedido extends JFrame {
 				if(!produto.getDescricao().equals("")){					
 					item.setPedido_id(pedido.getId());
 					item.setProduto_cod(produto.getCod());
-					item.setValor(produto.getPreco());
-					item.setSubtotal(item.getQuantidade()*item.getValor());
-					System.out.println(item.getSubtotal());
+					item.setValor(Double.parseDouble(""+produto.getPreco()));					
+					int qnt = item.getQuantidade();
+					double vl = item.getValor();
+					System.out.println("quantidade: "+qnt+"\nValor: "+vl);
+					int local = procurapeloid(item.getProduto_cod());
 					if(!(item.getQuantidade()==0)){
-						produtos.add(produto);
-						itens.add(new Itempedido(item.getPedido_id(),item.getProduto_cod(),item.getQuantidade(),item.getValor(),item.getSubtotal()));
+						
+						if(99999 == local){
+							produtos.add(produto);
+							item.setSubtotal(vl*qnt);
+							itens.add(new Itempedido(item.getPedido_id(),item.getProduto_cod(),item.getQuantidade(),item.getValor(),item.getSubtotal()));
+						}else{							
+							itens.get(local).addMaisQuantidade(qnt);
+						}						
 						preencheouEsvazia(true);
 					}else{
 						JOptionPane.showMessageDialog(null, "Qual a quantidade?");
@@ -306,6 +333,17 @@ public class GerenciamentoPedido extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				pedido = PedidoDAO.buscaClienteDoPedido(pedido.getId());
 				pedidoNaTela();
+				itens = ItempedidoDAO.buscaItensDoPedido(pedido.getId());
+				if(itens.size()!=0){
+					ja_tinha_itens_no_pedido = true;
+					System.out.println(itens.size());
+					produtos = ProdutoDao.procuraProdutos(itens);
+					try {
+						preencheouEsvazia(true);	
+					} catch (Exception yyy) {
+						System.out.println("oop");
+					}					
+				}
 			}
 		});
 		btnCriar.addActionListener(new ActionListener() {
@@ -343,12 +381,12 @@ public class GerenciamentoPedido extends JFrame {
 	public void preencheouEsvazia(boolean preenche) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 	
-		// Clear the table
+
 		for(int i = 0;i<model.getRowCount();i++){
 			model.removeRow(0);
-		}
+		}			
 		model.setRowCount(0);
-	
+					
 		if (preenche) {
 			// Populate the table with the items
 			for (int i = 0;i<itens.size();i++) {	
@@ -359,7 +397,6 @@ public class GerenciamentoPedido extends JFrame {
 	public int procurapeloid(String id){
 		for(int i = itens.size()-1;i>=0;i--){
 			if(itens.get(i).getProduto_cod().equals(id)){
-				System.out.println(i);
 				return i;
 			}
 		}
@@ -368,7 +405,6 @@ public class GerenciamentoPedido extends JFrame {
 	public void pedidoNaTela(){
 		tf_idp.setText(pedido.getId());
 		tf_cpf.setText(pedido.getCliente_cpf());
-		System.out.println(pedido.getData(false));
 		String data = pedido.getData(false);
 		String[] dataseparada = data.split(" 00:00:00");
 		data = dataseparada[0]+dataseparada[1];

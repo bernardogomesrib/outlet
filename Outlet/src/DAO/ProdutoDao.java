@@ -3,9 +3,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import ENTIDADES.Itempedido;
 import ENTIDADES.Produto;
 
 public class ProdutoDao {
@@ -96,6 +98,30 @@ ENGINE = InnoDB; */
             JOptionPane.showMessageDialog(null, "Erro ao buscar Produto!\n"+ e.getMessage());
         }
         return produto;
+    }
+    public static ArrayList<Produto>procuraProdutos(ArrayList<Itempedido>itens){
+        ArrayList<Produto>pr = new ArrayList<Produto>();
+        String sql = "SELECT * FROM produto WHERE ";
+        int tam = itens.size();
+        for (int i = 0;i<tam;i++) {
+            if(i == tam-1){
+                sql+= " cod = '"+itens.get(i).getProduto_cod()+"'";
+            }else{
+                sql+= " cod = '"+itens.get(i).getProduto_cod()+"' or";
+            }
+            try {
+                ps = con.prepareStatement(sql);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    pr.add(new Produto(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5)));
+                }
+
+
+            } catch (SQLException e) {
+               //JOptionPane.showMessageDialog(null, "Erro ao procurar produtos! \n "+e.getMessage());
+            }
+        }
+        return pr;
     }
 
 }
