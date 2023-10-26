@@ -57,6 +57,18 @@ ENGINE = InnoDB;
         }        
         return vl;
     }
+    public static int deletaItensdoPedido(String idPedido){
+        int val = 0;
+        try {
+            String sql = "DELETE FROM itempedido WHERE pedido_id = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,idPedido);            
+            val += ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao deletar itens do pedido!\n"+ e.getMessage());
+        }
+        return val;
+    }
     public static int deleta(Itempedido itempedido){
         int vl = 0;
         try {

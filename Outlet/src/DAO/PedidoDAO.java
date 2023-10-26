@@ -39,8 +39,11 @@ ENGINE = InnoDB; */
             vl += ps.executeUpdate();
             
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao inserir pedido!\n"+ e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao criar pedido!\n"+ e.getMessage());
+        } catch(NullPointerException e){
+            JOptionPane.showMessageDialog(null, "Erro ao criar pedido!\n Não deixe nem um campo vazio!");
         }
+
         return vl;
     }
     public static int deleta(Pedido pedido){
@@ -108,5 +111,6 @@ ENGINE = InnoDB; */
         return pedido;
         
     }
+   
     
 }

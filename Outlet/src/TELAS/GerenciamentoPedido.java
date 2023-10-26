@@ -87,7 +87,7 @@ public class GerenciamentoPedido extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(119, 118, 123));
-		panel.setBounds(33, 33, 398, 446);
+		panel.setBounds(32, 112, 398, 446);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -155,20 +155,15 @@ public class GerenciamentoPedido extends JFrame {
 		btnExcluir.setBounds(284, 100, 79, 25);
 		panel.add(btnExcluir);
 		
-		JLabel lblProdutosParaO = new JLabel("Produtos para o pedido");
-		lblProdutosParaO.setBounds(37, 137, 326, 33);
-		panel.add(lblProdutosParaO);
-		lblProdutosParaO.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblProdutosParaO.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JLabel lblIdDoProduto = new JLabel("id do produto");
-		lblIdDoProduto.setBounds(27, 184, 134, 15);
-		panel.add(lblIdDoProduto);
-		lblIdDoProduto.setHorizontalAlignment(SwingConstants.RIGHT);
+		JPanel panelProdutos = new JPanel();
+		panelProdutos.setBackground(new Color(119, 118, 123));
+		panelProdutos.setBounds(12, 137, 374, 108);
+		panel.add(panelProdutos);
+		panelProdutos.setLayout(null);
 		
 		tf_cod = new JTextField();
-		tf_cod.setBounds(182, 182, 180, 19);
-		panel.add(tf_cod);
+		tf_cod.setBounds(167, 45, 180, 19);
+		panelProdutos.add(tf_cod);
 		tf_cod.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -177,27 +172,46 @@ public class GerenciamentoPedido extends JFrame {
 		});
 		tf_cod.setColumns(10);
 		
-		JLabel lblQuantidade = new JLabel("Quantidade");
-		lblQuantidade.setBounds(38, 211, 124, 15);
-		panel.add(lblQuantidade);
-		lblQuantidade.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel lblIdDoProduto = new JLabel("id do produto");
+		lblIdDoProduto.setBounds(12, 47, 134, 15);
+		panelProdutos.add(lblIdDoProduto);
+		lblIdDoProduto.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		tf_quantidade = new JTextField();
-		tf_quantidade.setBounds(183, 211, 180, 19);
-		panel.add(tf_quantidade);
+		tf_quantidade.setBounds(169, 77, 180, 19);
+		panelProdutos.add(tf_quantidade);
 		tf_quantidade.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				
-				try {
-					qnt = tf_quantidade.getText();					
-					item.setQuantidade(Integer.parseInt(qnt.strip()));
-				} catch (Exception z) {
-					System.out.println(z.getMessage());
+			public void keyReleased(KeyEvent e) {				
+				qnt = tf_quantidade.getText();					
+				String trueNum ="";
+				for(int i = 0;i<qnt.length();i++){
+					char a = qnt.charAt(i);
+					try {
+						int b = Integer.parseInt(""+a);
+						trueNum+=""+b;
+						item.setQuantidade(Integer.parseInt(trueNum));
+					} catch (Exception yyys) {
+						System.out.println(yyys.getMessage());		
+					}
+
 				}
+				tf_quantidade.setText(trueNum);
+				
 			}
 		});
 		tf_quantidade.setColumns(10);
+		
+		JLabel lblQuantidade = new JLabel("Quantidade");
+		lblQuantidade.setBounds(24, 77, 124, 15);
+		panelProdutos.add(lblQuantidade);
+		lblQuantidade.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		JLabel lblProdutosParaO = new JLabel("Produtos para o pedido");
+		lblProdutosParaO.setBounds(23, 0, 326, 33);
+		panelProdutos.add(lblProdutosParaO);
+		lblProdutosParaO.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblProdutosParaO.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JButton btnInserir = new JButton("Inserir");
 		btnInserir.setBounds(12, 257, 95, 25);
@@ -212,12 +226,20 @@ public class GerenciamentoPedido extends JFrame {
 		panel.add(btnEditar_1);
 		
 		JButton btnConcluirCompra = new JButton("Concluir pedido");
-		btnConcluirCompra.setBounds(12, 362, 164, 25);
+		btnConcluirCompra.setBounds(12, 323, 164, 25);
 		panel.add(btnConcluirCompra);
 		
 		JButton btnCancelarPedido = new JButton("Cancelar Pedido");
-		btnCancelarPedido.setBounds(199, 362, 164, 25);
+		btnCancelarPedido.setBounds(199, 323, 164, 25);
 		panel.add(btnCancelarPedido);
+		
+		JButton btnFinalizarCompra = new JButton("Finalizar compra");
+		btnFinalizarCompra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnFinalizarCompra.setBounds(12, 396, 351, 25);
+		panel.add(btnFinalizarCompra);
 		
 		/*
 		
@@ -234,14 +256,34 @@ public class GerenciamentoPedido extends JFrame {
 		defineTabela();
 		
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(500, 33, 450, 555);
+		scrollPane.setBounds(496, 50, 450, 555);
 		scrollPane.setPreferredSize(new DimensionUIResource(450, 555)); // define a largura e altura do ScrollPane
 		JViewport viewport = scrollPane.getViewport(); // define a cor de fundo do ScrollPane
 		viewport.setBackground(new Color(255,255,255)); 
 		
 		contentPane.add(scrollPane);
+		
+		JLabel lblGerenciamentoDePedidos = new JLabel("Gerenciamento de pedidos");
+		lblGerenciamentoDePedidos.setFont(new Font("Dialog", Font.BOLD, 18));
+		lblGerenciamentoDePedidos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGerenciamentoDePedidos.setBounds(32, 51, 390, 32);
+		contentPane.add(lblGerenciamentoDePedidos);
 		btnCancelarPedido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(ja_tinha_itens_no_pedido){
+					if(ItempedidoDAO.deletaItensdoPedido(pedido.getId())>=1){
+						itens.clear();
+						produtos.clear(); 
+						JOptionPane.showMessageDialog(null,"Itens deletados do pedido.");
+						preencheouEsvazia(false);
+					}
+					
+				}else{
+					itens.clear();
+					produtos.clear();
+					JOptionPane.showMessageDialog(null,"Itens deletados do pedido.");
+					preencheouEsvazia(false);
+				}
 			}
 		});
 		btnConcluirCompra.addActionListener(new ActionListener() {
@@ -257,11 +299,13 @@ public class GerenciamentoPedido extends JFrame {
 						ItempedidoDAO.deleta(ite);
 					}
 					if(ItempedidoDAO.colocarvarios(itens,produtos)>=1){
-					JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
+						JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
+						ja_tinha_itens_no_pedido = true;
 					}
 				}else{
 					if(ItempedidoDAO.colocarvarios(itens,produtos)>=1){
-					JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
+						JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
+						ja_tinha_itens_no_pedido = true;
 					}
 				}
 			}
@@ -389,7 +433,7 @@ public class GerenciamentoPedido extends JFrame {
 					
 		if (preenche) {
 			// Populate the table with the items
-			for (int i = 0;i<itens.size();i++) {	
+			for (int i = 0;i<itens.size();i++) {
 				model.addRow(new Object[]{produtos.get(i).getDescricao(),itens.get(i).getQuantidade(),itens.get(i).getSubtotal()});
 			}
 		}
