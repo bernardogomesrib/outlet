@@ -271,10 +271,14 @@ public class GerenciamentoPedido extends JFrame {
 		btnCancelarPedido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(ja_tinha_itens_no_pedido){
-					if(ItempedidoDAO.deletaItensdoPedido(pedido.getId())>=1){
+					if(ItempedidoDAO.deletaItensdoPedido(tf_idp.getText())>=1){
 						itens.clear();
 						produtos.clear(); 
 						JOptionPane.showMessageDialog(null,"Itens deletados do pedido.");
+						preencheouEsvazia(false);
+					}else{
+						itens.clear();
+						produtos.clear(); 
 						preencheouEsvazia(false);
 					}
 					
@@ -403,14 +407,16 @@ public class GerenciamentoPedido extends JFrame {
 	}
 	public void defineTabela(){
 		DefaultTableModel model = (DefaultTableModel) table.getModel(); //
+		model.addColumn("id");
 		model.addColumn("Descrição"); // adiciona a coluna 0
 		model.addColumn("Qnt"); // adiciona a coluna 1
 		model.addColumn("Preço"); // adiciona a coluna 2
-		table.getColumnModel().getColumn(0).setPreferredWidth(330); // define a largura da coluna 0
-		table.getColumnModel().getColumn(1).setPreferredWidth(30); // define a largura da coluna 1
-		table.getColumnModel().getColumn(2).setPreferredWidth(90);
+		table.getColumnModel().getColumn(0).setPreferredWidth(30);
+		table.getColumnModel().getColumn(1).setPreferredWidth(300); // define a largura da coluna 0
+		table.getColumnModel().getColumn(2).setPreferredWidth(30); // define a largura da coluna 1
+		table.getColumnModel().getColumn(3).setPreferredWidth(90);
 	}
-	public MaskFormatter Mascara(String Mascara){
+	public static MaskFormatter Mascara(String Mascara){
         
 		MaskFormatter F_Mascara = new MaskFormatter();
 		try{
@@ -434,7 +440,7 @@ public class GerenciamentoPedido extends JFrame {
 		if (preenche) {
 			// Populate the table with the items
 			for (int i = 0;i<itens.size();i++) {
-				model.addRow(new Object[]{produtos.get(i).getDescricao(),itens.get(i).getQuantidade(),itens.get(i).getSubtotal()});
+				model.addRow(new Object[]{produtos.get(i).getCod(),produtos.get(i).getDescricao(),itens.get(i).getQuantidade(),itens.get(i).getSubtotal()});
 			}
 		}
 	}
