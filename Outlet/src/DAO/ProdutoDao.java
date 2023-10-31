@@ -19,16 +19,16 @@ public class ProdutoDao {
     }
     public static int insereProduto(Produto produto){
          /*-- -----------------------------------------------------
--- Table `outlet`.`produto`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `outlet`.`produto` (
-  `cod` INT NOT NULL,
-  `descricao` VARCHAR(100) NOT NULL,
-  `marca` VARCHAR(45) NULL,
-  `preco` DECIMAL(8,2) NOT NULL,
-  `quantidadeestoque` INT NOT NULL,
-  PRIMARY KEY (`cod`))
-ENGINE = InnoDB; */
+        -- Table `outlet`.`produto`
+        -- -----------------------------------------------------
+        CREATE TABLE IF NOT EXISTS `outlet`.`produto` (
+        `cod` INT NOT NULL,
+        `descricao` VARCHAR(100) NOT NULL,
+        `marca` VARCHAR(45) NULL,
+        `preco` DECIMAL(8,2) NOT NULL,
+        `quantidadeestoque` INT NOT NULL,
+        PRIMARY KEY (`cod`))
+        ENGINE = InnoDB; */
         int vl = 0;
         try {
             String sql = "INSERT INTO produto(cod,descricao,marca,preco,quantidadeestoque) values (?,?,?,?,?)";
