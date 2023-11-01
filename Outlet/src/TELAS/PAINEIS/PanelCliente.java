@@ -226,7 +226,12 @@ public class PanelCliente extends JPanel {
 		JButton btn_AtualizarCliente = new JButton("Atualizar");
 		btn_AtualizarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				pegaInformacoes();
+				int val = ClienteDAO.atualizaCliente(cliente);
+				val += EnderecoDAO.atualizaEndereco(endereco);
+				if(val>=1){
+					JOptionPane.showMessageDialog(null, "Atualizações foram feitas");
+				}
 			}
 		});
 		btn_AtualizarCliente.setBounds(449, 518, 117, 29);

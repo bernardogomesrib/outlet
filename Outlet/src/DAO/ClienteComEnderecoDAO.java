@@ -22,6 +22,7 @@ public class ClienteComEnderecoDAO {
     public static ArrayList<ClienteComEndereco> buscar(String cidade,String estado){
         String query = "";
         ArrayList<ClienteComEndereco> ls = new ArrayList<ClienteComEndereco>();
+        ls.clear();
         if (cidade.equals("") && estado.equals("Selecione")) {
             query = "SELECT cliente.*, endereco.* FROM cliente INNER JOIN endereco ON cliente.cpf = endereco.cliente_cpf";
         } else if (!cidade.equals("") && estado.equals("Selecione")) {
@@ -29,7 +30,7 @@ public class ClienteComEnderecoDAO {
         } else if (!cidade.equals("") && !estado.equals("Selecione")) {
             query = "SELECT cliente.*, endereco.* FROM cliente INNER JOIN endereco ON cliente.cpf = endereco.cliente_cpf WHERE endereco.cidade = '" + cidade + "' AND endereco.estado = '" + estado + "'";
         }else{
-            query = "SELECT cliente.*, endereco.* FROM cliente INNER JOIN endereco ON cliente.cpf = endereco.cliente_cpf";
+            query = "SELECT cliente.*, endereco.* FROM cliente INNER JOIN endereco ON cliente.cpf = endereco.cliente_cpf WHERE endereco.estado ='"+estado+"'";
         }
         try {
             stmt = con.prepareStatement(query);

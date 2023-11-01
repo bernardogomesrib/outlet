@@ -56,7 +56,7 @@ public class gerenciamento_produto extends JFrame {
 	 */
 	public gerenciamento_produto() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 630);
+		setBounds(0, 0, 910, 686);
 		contentPane_titlulo = new JPanel();
 		contentPane_titlulo.setBackground(new Color(128, 128, 128));
 		contentPane_titlulo.setBorder(new EmptyBorder(5, 5, 5, 5));

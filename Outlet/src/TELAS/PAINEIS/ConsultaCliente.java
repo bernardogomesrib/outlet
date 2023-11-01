@@ -92,13 +92,16 @@ public class ConsultaCliente extends JPanel {
 		JButton bt_BuscarClienteConsulta = new JButton("Buscar");
 		bt_BuscarClienteConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				clienteComEnderecos = ClienteComEnderecoDAO.buscar(tf_CidadeClienteConsulta.getText(),(String) cb_EstadoClienteConsulta.getSelectedItem());
+				String cidade = tf_CidadeClienteConsulta.getText();
+				String estado =(String) cb_EstadoClienteConsulta.getSelectedItem();
+				System.out.println(cidade+"é a cidade selecionada e "+estado+" é o estado");
+				clienteComEnderecos = ClienteComEnderecoDAO.buscar(cidade,estado);
 				if(clienteComEnderecos.size()>=1){
 					preencheouEsvazia(true);
 				}else{
 					preencheouEsvazia(true);
 				}
-				System.out.println("o tamanho foi de:"+clienteComEnderecos.size());
+				
 			}
 		});
 		bt_BuscarClienteConsulta.setBounds(667, 34, 117, 29);

@@ -1,7 +1,6 @@
-package TELAS;
+package TELAS.PAINEIS;
 
 
-import javax.swing.JFrame;
 import DAO.ProdutoDao;
 import ENTIDADES.Produto;
 
@@ -9,6 +8,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -21,7 +21,7 @@ import javax.swing.SwingConstants;
 
 
 
-public class PanelTeste extends JFrame {
+public class PanelGerenciamentoProduto extends JPanel {
 	
 	private JTextField tf_cod;
 	private JTextField tf_preco;
@@ -37,42 +37,42 @@ public class PanelTeste extends JFrame {
 			layeredPane.add(this);
 			layeredPane.moveToFront(this);
 		}
-    	public PanelTeste(JLayeredPane layeredPane) {
+    	public PanelGerenciamentoProduto(JLayeredPane layeredPane) {
 		this.layeredPane = layeredPane;			
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		setBounds(0, 0, 910, 686);		
-		setBackground(new Color(128, 128, 128));		
-		getContentPane().setLayout(null);
+		setBackground(new Color(255, 255, 255));	
+		setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Gerenciamento de Produtos");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 22));
 		lblNewLabel.setBounds(12, 22, 876, 27);
-		getContentPane().add(lblNewLabel);
+		add(lblNewLabel);
 		
 		JLabel lblNewLabel_idproduto = new JLabel("ID Produto");
 		lblNewLabel_idproduto.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_idproduto.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_idproduto.setBounds(137, 136, 111, 14);
-		getContentPane().add(lblNewLabel_idproduto);
+		add(lblNewLabel_idproduto);
 		
 		JLabel lblNewLabel_valorcompra = new JLabel("Preço");
 		lblNewLabel_valorcompra.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_valorcompra.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_valorcompra.setBounds(162, 214, 86, 14);
-		getContentPane().add(lblNewLabel_valorcompra);
+		add(lblNewLabel_valorcompra);
 		
 		JLabel lblNewLabel_3_descricao = new JLabel("Descrição");
 		lblNewLabel_3_descricao.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_3_descricao.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_3_descricao.setBounds(162, 162, 86, 14);
-		getContentPane().add(lblNewLabel_3_descricao);
+		add(lblNewLabel_3_descricao);
 		
 		JLabel lblNewLabel_5_marca = new JLabel("Marca");
 		lblNewLabel_5_marca.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_5_marca.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_5_marca.setBounds(162, 188, 86, 14);
-		getContentPane().add(lblNewLabel_5_marca);
+		add(lblNewLabel_5_marca);
 		
 		tf_cod = new JTextField();
 		tf_cod.addKeyListener(new KeyAdapter() {
@@ -82,7 +82,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		tf_cod.setBounds(261, 135, 397, 20);
-		getContentPane().add(tf_cod);
+		add(tf_cod);
 		tf_cod.setColumns(10);
 		
 		tf_preco = new JTextField();
@@ -98,7 +98,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		tf_preco.setBounds(261, 213, 397, 20);
-		getContentPane().add(tf_preco);
+		add(tf_preco);
 		tf_preco.setColumns(10);
 		
 		tf_descricao = new JTextField();
@@ -109,7 +109,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		tf_descricao.setBounds(261, 161, 397, 20);
-		getContentPane().add(tf_descricao);
+		add(tf_descricao);
 		tf_descricao.setColumns(10);
 		
 		tf_marca = new JTextField();
@@ -120,7 +120,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		tf_marca.setBounds(261, 187, 397, 20);
-		getContentPane().add(tf_marca);
+		add(tf_marca);
 		tf_marca.setColumns(10);
 		
 		JButton btn_cadastrar = new JButton("Cadastrar");
@@ -133,7 +133,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		btn_cadastrar.setBounds(153, 445, 108, 23);
-		getContentPane().add(btn_cadastrar);
+		add(btn_cadastrar);
 		
 		JButton btn_buscar = new JButton("Buscar");
 		btn_buscar.addActionListener(new ActionListener() {
@@ -143,7 +143,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		btn_buscar.setBounds(288, 445, 111, 23);
-		getContentPane().add(btn_buscar);
+		add(btn_buscar);
 		
 		JButton btn_excluir = new JButton("Excluir");
 		btn_excluir.addActionListener(new ActionListener() {
@@ -155,7 +155,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		btn_excluir.setBounds(570, 445, 111, 23);
-		getContentPane().add(btn_excluir);
+		add(btn_excluir);
 		
 		tf_quantidadeestoque = new JTextField();
 		tf_quantidadeestoque.addKeyListener(new KeyAdapter() {
@@ -171,13 +171,13 @@ public class PanelTeste extends JFrame {
 		});
 		tf_quantidadeestoque.setColumns(10);
 		tf_quantidadeestoque.setBounds(366, 239, 293, 20);
-		getContentPane().add(tf_quantidadeestoque);
+		add(tf_quantidadeestoque);
 		
 		JLabel lblNewLabel_2_valorvenda_1 = new JLabel("Quantidade no estoque");
 		lblNewLabel_2_valorvenda_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_2_valorvenda_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_2_valorvenda_1.setBounds(153, 240, 207, 14);
-		getContentPane().add(lblNewLabel_2_valorvenda_1);
+		add(lblNewLabel_2_valorvenda_1);
 		
 		JButton btn_atualizar = new JButton("Atualizar");
 		btn_atualizar.addActionListener(new ActionListener() {
@@ -188,7 +188,7 @@ public class PanelTeste extends JFrame {
 			}
 		});
 		btn_atualizar.setBounds(423, 445, 111, 23);
-		getContentPane().add(btn_atualizar);
+		add(btn_atualizar);
 		
 	}
 	public void preencheOuApaga(boolean preenche) {		

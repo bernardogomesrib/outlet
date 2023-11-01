@@ -17,9 +17,13 @@ import javax.swing.BoxLayout;
 import DATABASE.Conexao;
 import TELAS.PAINEIS.ConsultaCliente;
 import TELAS.PAINEIS.PanelCliente;
+import TELAS.PAINEIS.PanelGerenciamentoProduto;
 import DAO.ClienteComEnderecoDAO;
 import DAO.ClienteDAO;
 import DAO.EnderecoDAO;
+import DAO.ItempedidoDAO;
+import DAO.ProdutoDao;
+import DAO.VendaDAO;
 
 
 public class TelaInicial extends JFrame {
@@ -29,7 +33,7 @@ public class TelaInicial extends JFrame {
     private JLayeredPane layeredPane = new JLayeredPane();
     PanelCliente panelCliente = new PanelCliente(layeredPane);
 	ConsultaCliente consultaCliente = new ConsultaCliente(layeredPane);
-	
+	PanelGerenciamentoProduto panelGerenciamentoProduto = new PanelGerenciamentoProduto(layeredPane);
 
 	/**
 	 * Launch the application.
@@ -44,6 +48,9 @@ public class TelaInicial extends JFrame {
 					ClienteDAO.start(con.getConexao());
 					EnderecoDAO.start(con.getConexao());
 					ClienteComEnderecoDAO.start(con.getConexao());
+					ProdutoDao.start(con.getConexao());
+					ItempedidoDAO.start(con.getConexao());
+					VendaDAO.start(con.getConexao());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -99,6 +106,8 @@ public class TelaInicial extends JFrame {
 		JMenuItem mntm_ProdutoGerenciamento = new JMenuItem("Gerenciamento");
 		mntm_ProdutoGerenciamento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				panelGerenciamentoProduto.praFrente();
 			}
 		});
 		mn_Produto.add(mntm_ProdutoGerenciamento);
