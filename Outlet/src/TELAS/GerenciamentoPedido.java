@@ -240,17 +240,7 @@ public class GerenciamentoPedido extends JFrame {
 		});
 		btnFinalizarCompra.setBounds(12, 396, 351, 25);
 		panel.add(btnFinalizarCompra);
-		
-		/*
-		
-		scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(511, 100, 450, 385);
-		scrollPane.setLocation(511, 100);
-		scrollPane.setSize(450, 385);
-		
-		
-		contentPane.add(scrollPane);
-		*/
+
 		table = new JTable();
 		table.setBounds(0, 0, 450, 555);
 		defineTabela();
@@ -317,7 +307,7 @@ public class GerenciamentoPedido extends JFrame {
 		btnEditar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int local = procurapeloid(tf_cod.getText());
-				if(local == 99999){
+				if(local == -9999){
 					JOptionPane.showMessageDialog(null, "não foi encontrado o produto");
 				}else{
 					itens.get(local).setQuantidadenova(Integer.parseInt(tf_quantidade.getText()));
@@ -348,7 +338,7 @@ public class GerenciamentoPedido extends JFrame {
 					int local = procurapeloid(item.getProduto_cod());
 					if(!(item.getQuantidade()==0)){
 						
-						if(99999 == local){
+						if(-9999 == local){
 							produtos.add(produto);
 							item.setSubtotal(vl*qnt);
 							itens.add(new Itempedido(item.getPedido_id(),item.getProduto_cod(),item.getQuantidade(),item.getValor(),item.getSubtotal()));
@@ -450,7 +440,7 @@ public class GerenciamentoPedido extends JFrame {
 				return i;
 			}
 		}
-		return 99999;
+		return -9999;
 	}
 	public void pedidoNaTela(){
 		tf_idp.setText(pedido.getId());

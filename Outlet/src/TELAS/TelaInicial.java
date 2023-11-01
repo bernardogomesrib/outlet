@@ -16,12 +16,15 @@ import javax.swing.BoxLayout;
 
 import DATABASE.Conexao;
 import TELAS.PAINEIS.ConsultaCliente;
+import TELAS.PAINEIS.ConsultaProduto;
 import TELAS.PAINEIS.PanelCliente;
 import TELAS.PAINEIS.PanelGerenciamentoProduto;
 import DAO.ClienteComEnderecoDAO;
 import DAO.ClienteDAO;
 import DAO.EnderecoDAO;
+import DAO.FornecedorDAO;
 import DAO.ItempedidoDAO;
+import DAO.PedidoDAO;
 import DAO.ProdutoDao;
 import DAO.VendaDAO;
 
@@ -34,7 +37,8 @@ public class TelaInicial extends JFrame {
     PanelCliente panelCliente = new PanelCliente(layeredPane);
 	ConsultaCliente consultaCliente = new ConsultaCliente(layeredPane);
 	PanelGerenciamentoProduto panelGerenciamentoProduto = new PanelGerenciamentoProduto(layeredPane);
-
+	ConsultaProduto consultaProduto = new ConsultaProduto(layeredPane);
+	PanelTeste panelTeste = new PanelTeste(layeredPane);
 	/**
 	 * Launch the application.
 	 */
@@ -51,6 +55,8 @@ public class TelaInicial extends JFrame {
 					ProdutoDao.start(con.getConexao());
 					ItempedidoDAO.start(con.getConexao());
 					VendaDAO.start(con.getConexao());
+					FornecedorDAO.start(con.getConexao());
+					PedidoDAO.start(con.getConexao());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -115,6 +121,8 @@ public class TelaInicial extends JFrame {
 		JMenuItem mntm_ProdutoConsulta = new JMenuItem("Consulta");
 		mntm_ProdutoConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				consultaProduto.praFrente();
 			}
 		});
 		mn_Produto.add(mntm_ProdutoConsulta);
@@ -128,6 +136,8 @@ public class TelaInicial extends JFrame {
 		JMenuItem mntm_PedidoGerenciamento = new JMenuItem("Gerenciamento");
 		mntm_PedidoGerenciamento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				panelTeste.praFrente();
 			}
 		});
 		mn_Pedido.add(mntm_PedidoGerenciamento);

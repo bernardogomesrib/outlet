@@ -99,6 +99,49 @@ public class ProdutoDao {
         }
         return produto;
     }
+    public static ArrayList<Produto>procuraProdutos(String cod,String descricao,boolean descricaoExata,String marca,boolean marcaExata,double precomin,double precomax,int quantmin,int quantmax){
+        ArrayList<Produto>pr = new ArrayList<Produto>();
+        String query = "SELECT * FROM produto WHERE";
+        if (!cod.equals("")) {
+            cod =" cod = "+cod+" AND ";
+        }
+        if(!descricao.equals("")){
+            if(descricaoExata){
+                descricao = " descricao = '"+descricao+"' AND ";
+            }else{
+                descricao = " descricao LIKE '%"+descricao+"%' AND ";
+            }
+            
+        }
+        if(!marca.equals("")){
+            if(marcaExata){
+                marca = " marca = '"+marca+"' AND ";
+            }else{
+                marca = " marca LIKE '%"+marca+"%' AND";
+            }
+            
+        }
+        String condicaoPreco = " preco >= '"+precomin+"' AND ";
+        if (precomax>0) {
+            condicaoPreco += " preco <= '"+precomax+"' AND ";
+        }
+        String condicaoQuantidade = " quantidadeestoque>= '"+quantmin+"' ";
+        if(quantmax>0){
+            condicaoQuantidade += " AND quantidadeestoque <= '"+quantmax+"' ";
+        }
+
+        query += cod+descricao+marca+condicaoPreco+condicaoQuantidade;
+         try {
+                ps = con.prepareStatement(query);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    pr.add(new Produto(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5)));
+                }
+            } catch (SQLException e) {
+               JOptionPane.showMessageDialog(null, "Erro ao procurar produtos! \n "+e.getMessage());
+            }
+        return pr;
+    }
     public static ArrayList<Produto>procuraProdutos(ArrayList<Itempedido>itens){
         ArrayList<Produto>pr = new ArrayList<Produto>();
         String sql = "SELECT * FROM produto WHERE ";

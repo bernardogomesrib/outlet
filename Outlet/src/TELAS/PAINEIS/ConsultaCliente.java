@@ -33,6 +33,7 @@ import DAO.ClienteComEnderecoDAO;
 import com.itextpdf.commons.exceptions.*;
 
 import ENTIDADES.ClienteComEndereco;
+import javax.swing.SwingConstants;
 
 
 
@@ -61,7 +62,8 @@ public class ConsultaCliente extends JPanel {
 		setLayout(null);
 		
 		JLabel lbl_CidadeClienteConsulta = new JLabel("Cidade");
-		lbl_CidadeClienteConsulta.setBounds(79, 39, 48, 16);
+		lbl_CidadeClienteConsulta.setHorizontalAlignment(SwingConstants.RIGHT);
+		lbl_CidadeClienteConsulta.setBounds(40, 39, 87, 16);
 		add(lbl_CidadeClienteConsulta);
 		
 		tf_CidadeClienteConsulta = new JTextField();
@@ -70,7 +72,8 @@ public class ConsultaCliente extends JPanel {
 		tf_CidadeClienteConsulta.setColumns(10);
 		
 		JLabel lbl_EstadoClienteConsulta = new JLabel("Estado");
-		lbl_EstadoClienteConsulta.setBounds(336, 39, 48, 16);
+		lbl_EstadoClienteConsulta.setHorizontalAlignment(SwingConstants.RIGHT);
+		lbl_EstadoClienteConsulta.setBounds(305, 39, 79, 16);
 		add(lbl_EstadoClienteConsulta);
 		
 		JComboBox<String> cb_EstadoClienteConsulta = new JComboBox<String>();
@@ -80,7 +83,7 @@ public class ConsultaCliente extends JPanel {
 		add(cb_EstadoClienteConsulta);
 		table = new JTable();
 		table.setBackground(new Color(255,255,255));								// define a cor de fundo do JTable
-		table.setBounds(0, 88, 910, 560);
+		table.setBounds(0, 0, 910, 560);
 		defineTabela();
 		scrollPaneCliente = new JScrollPane(table);
 		scrollPaneCliente.setLocation(0, 67);
