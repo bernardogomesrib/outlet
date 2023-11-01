@@ -1,5 +1,7 @@
 package ENTIDADES;
 
+import java.text.DecimalFormat;
+
 public class Produto {
     /*-- -----------------------------------------------------
 -- Table `outlet`.`produto`
@@ -46,6 +48,10 @@ ENGINE = InnoDB; */
     }
     public double getPreco() {
         return preco;
+    }
+    public String getPrecof() {
+        DecimalFormat df = new DecimalFormat("0.00");
+        return "R$ "+df.format(preco);
     }
     public void setPreco(double preco) {
         this.preco = preco;

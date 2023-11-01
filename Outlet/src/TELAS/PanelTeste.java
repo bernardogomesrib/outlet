@@ -171,10 +171,8 @@ public class PanelTeste extends JPanel {
 					} catch (Exception yyys) {
 						System.out.println(yyys.getMessage());		
 					}
-
 				}
 				tf_quantidade.setText(trueNum);
-				
 			}
 		});
 		tf_quantidade.setColumns(10);
@@ -248,7 +246,6 @@ public class PanelTeste extends JPanel {
 						produtos.clear(); 
 						preencheouEsvazia(false);
 					}
-					
 				}else{
 					itens.clear();
 					produtos.clear();
@@ -264,7 +261,7 @@ public class PanelTeste extends JPanel {
 				for (Itempedido itempedido : itens) {
 					somas+=itempedido.getSubtotal();
 				}
-				model.addRow(new Object[]{"Total:","",somas});
+				model.addRow(new Object[]{"","Total:","",somas});
 				if(ja_tinha_itens_no_pedido){
 					for (Itempedido ite : itens) {
 						ItempedidoDAO.deleta(ite);
@@ -298,35 +295,38 @@ public class PanelTeste extends JPanel {
 				itens.remove(idRemovido);
 				produtos.remove(idRemovido);
 				preencheouEsvazia(true);
-
 			}
 		});
 		btnInserir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String estado = tf_quantidade.getText();;
 				produto = ProdutoDao.busca(produto.getCod());
-				if(!produto.getDescricao().equals("")){					
-					item.setPedido_id(pedido.getId());
-					item.setProduto_cod(produto.getCod());
-					item.setValor(Double.parseDouble(""+produto.getPreco()));					
-					int qnt = item.getQuantidade();
-					double vl = item.getValor();
-					System.out.println("quantidade: "+qnt+"\nValor: "+vl);
-					int local = procurapeloid(item.getProduto_cod());
-					if(!(item.getQuantidade()==0)){
-						
-						if(-9999 == local){
-							produtos.add(produto);
-							item.setSubtotal(vl*qnt);
-							itens.add(new Itempedido(item.getPedido_id(),item.getProduto_cod(),item.getQuantidade(),item.getValor(),item.getSubtotal()));
-						}else{							
-							itens.get(local).addMaisQuantidade(qnt);
-						}						
-						preencheouEsvazia(true);
+				try {
+					if(!produto.getDescricao().equals("")){					
+						item.setPedido_id(pedido.getId());
+						item.setProduto_cod(produto.getCod());
+						item.setValor(Double.parseDouble(""+produto.getPreco()));					
+						int qnt = item.getQuantidade();
+						double vl = item.getValor();
+						System.out.println("quantidade: "+qnt+"\nValor: "+vl);
+						int local = procurapeloid(item.getProduto_cod());
+						if(!(item.getQuantidade()==0)){							
+							if(-9999 == local){
+								produtos.add(produto);
+								item.setSubtotal(vl*qnt);
+								itens.add(new Itempedido(item.getPedido_id(),item.getProduto_cod(),item.getQuantidade(),item.getValor(),item.getSubtotal()));
+							}else{							
+								itens.get(local).addMaisQuantidade(qnt);
+							}						
+							preencheouEsvazia(true);
 					}else{
 						JOptionPane.showMessageDialog(null, "Qual a quantidade?");
 					}
 				}
+				} catch (NullPointerException zxc) {
+					JOptionPane.showMessageDialog(null, "Produto não encontrado");
+				}
+				
 				tf_quantidade.setText(estado);
 			}
 		});
@@ -367,10 +367,7 @@ public class PanelTeste extends JPanel {
 					JOptionPane.showMessageDialog(null, "Pedido criado");
 				}
 			}
-		});
-	
-		
-		
+		});		
 	}
 	public void defineTabela(){
 		DefaultTableModel model = (DefaultTableModel) table.getModel(); //
@@ -397,13 +394,10 @@ public class PanelTeste extends JPanel {
  	}
 	public void preencheouEsvazia(boolean preenche) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-	
-
 		for(int i = 0;i<model.getRowCount();i++){
 			model.removeRow(0);
 		}			
-		model.setRowCount(0);
-					
+		model.setRowCount(0);	
 		if (preenche) {
 			// Populate the table with the items
 			for (int i = 0;i<itens.size();i++) {

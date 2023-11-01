@@ -12,11 +12,23 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.commons.exceptions.ITextException;
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JCheckBox;
@@ -102,7 +114,7 @@ public class ConsultaProduto extends JPanel {
 		JButton btnSalvarRelatrio = new JButton("Salvar relatório");
 		btnSalvarRelatrio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				geraDocumento();
 			}
 		});
 		btnSalvarRelatrio.setBounds(705, 649, 179, 25);
@@ -200,6 +212,48 @@ public class ConsultaProduto extends JPanel {
 			for (Produto prod : produtos) {
 				model.addRow(new Object[]{prod.getCod(),prod.getDescricao(),prod.getMarca(),prod.getPreco(),prod.getQuantidadeestoque()});
 			}
+		}
+	}
+	public void geraDocumento(){
+		String html = "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta ame='viewport' content='width=device-width, initial-scale=1.0'><title>ocument</title></head><body><style>table{width: 99%;}th{background-color: gray;}.cn{background-color: aqua;}table, th, td {border: 1px solid black;border-collapse: collapse;}h1{text-align: center;}</style><h1>Relatório de Produtos</h1><table><thead><tr><th>COD</th><th>Descrição</th><th>Marca</th><th>Quantidade</th><th>Preço</th></tr></thead><tbody>";
+
+		try {
+			boolean corsin= true;
+			for (Produto oop : produtos) {
+				if (corsin) {
+					html+= "<tr>";
+					html+=" <td>"+oop.getCod()+"</td><td>"+oop.getDescricao()+"</td><td>"+oop.getMarca()+"</td><td>"+oop.getQuantidadeestoque()+"</td><td>"+oop.getPrecof()+"</td></tr>";
+				
+					corsin=!corsin;
+				}else{
+					html+= "<tr class = 'cn'>";
+					html+=" <td>"+oop.getCod()+"</td><td>"+oop.getDescricao()+"</td><td>"+oop.getMarca()+"</td><td>"+oop.getQuantidadeestoque()+"</td><td>"+oop.getPrecof()+"</td></tr>";
+					corsin=!corsin;
+				}
+			}
+			html+="</tbody></table></body></html>";
+			// cria arquivo temporario
+			File arquivo = File.createTempFile("arquivoTemp", ".html");
+			// Cria um FileWriter para o arquivo
+			FileWriter writer = new FileWriter(arquivo);
+
+			// Escreve a String no arquivo
+			writer.write(html);
+			
+			// Fecha o FileWriter
+			writer.close();
+
+			// Cria um novo documento PDF com tamanho de página paisagem
+			PdfWriter pdfWriter = new PdfWriter("relatorioProduto.pdf");
+			PdfDocument pdfDoc = new PdfDocument(pdfWriter);
+			pdfDoc.setDefaultPageSize(PageSize.A4.rotate());
+
+			// Converte a string HTML para PDF
+			ConverterProperties props = new ConverterProperties();
+			HtmlConverter.convertToPdf(new FileInputStream(arquivo), pdfDoc, props);
+			
+		} catch (IOException|ITextException erro_consulta_cliente) {
+				JOptionPane.showMessageDialog(null, erro_consulta_cliente.getMessage());
 		}
 	}
 }

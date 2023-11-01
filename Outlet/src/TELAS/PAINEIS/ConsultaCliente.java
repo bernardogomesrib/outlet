@@ -151,47 +151,47 @@ public class ConsultaCliente extends JPanel {
 		}
 	}
 	public void geraDocumento(){
-    String html = "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body><style>table{width: 99%;}th{background-color: gray;}.cn{background-color: aqua;}table, th, td {border: 1px solid black;border-collapse: collapse;}h1{text-align: center;}</style><h1>Relatório de Clientes</h1><table><thead><tr><th>CPF</th><th>Nome</th><th>Nascimento</th><th>E-mail</th><th>Telefone</th><th>Cidade</th><th>Estado</th></tr></thead><tbody>";
+		String html = "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body><style>table{width: 99%;}th{background-color: gray;}.cn{background-color: aqua;}table, th, td {border: 1px solid black;border-collapse: collapse;}h1{text-align: center;}</style><h1>Relatório de Clientes</h1><table><thead><tr><th>CPF</th><th>Nome</th><th>Nascimento</th><th>E-mail</th><th>Telefone</th><th>Cidade</th><th>Estado</th></tr></thead><tbody>";
 
-	try {
-		boolean corsin= true;
-		for (ClienteComEndereco oop : clienteComEnderecos) {
-			if (corsin) {
-				html+= "<tr>";
-				html+=" <td>"+oop.getCliente().getCpf()+"</td><td>"+oop.getCliente().getNome()+"</td><td>"+oop.getCliente().getDatanascimento(false)+"</td><td>"+oop.getCliente().getEmail()+"</td><td>"+oop.getCliente().getTelefone()+"</td><td>"+oop.getEndereco().getCidade()+"</td><td>"+oop.getEndereco().getEstado()+"</td></tr>";
-			
-				corsin=!corsin;
-			}else{
-				html+= "<tr class = 'cn'>";
-				html+=" <td>"+oop.getCliente().getCpf()+"</td><td>"+oop.getCliente().getNome()+"</td><td>"+oop.getCliente().getDatanascimento(false)+"</td><td>"+oop.getCliente().getEmail()+"</td><td>"+oop.getCliente().getTelefone()+"</td><td>"+oop.getEndereco().getCidade()+"</td><td>"+oop.getEndereco().getEstado()+"</td></tr>";
-				corsin=!corsin;
+		try {
+			boolean corsin= true;
+			for (ClienteComEndereco oop : clienteComEnderecos) {
+				if (corsin) {
+					html+= "<tr>";
+					html+=" <td>"+oop.getCliente().getCpf()+"</td><td>"+oop.getCliente().getNome()+"</td><td>"+oop.getCliente().getDatanascimento(false)+"</td><td>"+oop.getCliente().getEmail()+"</td><td>"+oop.getCliente().getTelefone()+"</td><td>"+oop.getEndereco().getCidade()+"</td><td>"+oop.getEndereco().getEstado()+"</td></tr>";
+				
+					corsin=!corsin;
+				}else{
+					html+= "<tr class = 'cn'>";
+					html+=" <td>"+oop.getCliente().getCpf()+"</td><td>"+oop.getCliente().getNome()+"</td><td>"+oop.getCliente().getDatanascimento(false)+"</td><td>"+oop.getCliente().getEmail()+"</td><td>"+oop.getCliente().getTelefone()+"</td><td>"+oop.getEndereco().getCidade()+"</td><td>"+oop.getEndereco().getEstado()+"</td></tr>";
+					corsin=!corsin;
+				}
 			}
+			html+="</tbody></table></body></html>";
+			// cria arquivo temporario
+			File arquivo = File.createTempFile("arquivoTemp", ".html");
+			// Cria um FileWriter para o arquivo
+			FileWriter writer = new FileWriter(arquivo);
+
+			// Escreve a String no arquivo
+			writer.write(html);
+			
+			// Fecha o FileWriter
+			writer.close();
+
+			// Cria um novo documento PDF com tamanho de página paisagem
+			PdfWriter pdfWriter = new PdfWriter("arquivo.pdf");
+			PdfDocument pdfDoc = new PdfDocument(pdfWriter);
+			pdfDoc.setDefaultPageSize(PageSize.A4.rotate());
+
+			// Converte a string HTML para PDF
+			ConverterProperties props = new ConverterProperties();
+			HtmlConverter.convertToPdf(new FileInputStream(arquivo), pdfDoc, props);
+			
+		} catch (IOException|ITextException erro_consulta_cliente) {
+				JOptionPane.showMessageDialog(null, erro_consulta_cliente.getMessage());
 		}
-		html+="</tbody></table></body></html>";
-        // cria arquivo temporario
-        File arquivo = File.createTempFile("arquivoTemp", ".html");
-        // Cria um FileWriter para o arquivo
-        FileWriter writer = new FileWriter(arquivo);
-
-        // Escreve a String no arquivo
-        writer.write(html);
-        
-        // Fecha o FileWriter
-        writer.close();
-
-        // Cria um novo documento PDF com tamanho de página paisagem
-        PdfWriter pdfWriter = new PdfWriter("arquivo.pdf");
-        PdfDocument pdfDoc = new PdfDocument(pdfWriter);
-        pdfDoc.setDefaultPageSize(PageSize.A4.rotate());
-
-        // Converte a string HTML para PDF
-        ConverterProperties props = new ConverterProperties();
-        HtmlConverter.convertToPdf(new FileInputStream(arquivo), pdfDoc, props);
-        
-    } catch (IOException|ITextException erro_consulta_cliente) {
-            JOptionPane.showMessageDialog(null, erro_consulta_cliente.getMessage());
-    }
-}
+	}
 }
 
 
