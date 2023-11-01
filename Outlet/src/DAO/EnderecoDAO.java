@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import ENTIDADES.Cliente;
 import ENTIDADES.Endereco;
 
 public class EnderecoDAO {
@@ -30,7 +31,7 @@ public class EnderecoDAO {
         `cep` CHAR(10) NOT NULL,
         `cliente_cpf` CHAR(14) NOT NULL, */
         try {
-            String sql = "INSERT INTO enderco(logradouro,numero,complemento,bairro,cidade,estado,cep,cliente_cpf) values(?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO endereco(logradouro,numero,complemento,bairro,cidade,estado,cep,cliente_cpf) values(?,?,?,?,?,?,?,?)";
             ps = con.prepareStatement(sql);
             ps.setString(1,endereco.getLogradouro());
             ps.setString(2,endereco.getNumero());
@@ -59,10 +60,23 @@ public class EnderecoDAO {
         }    
         return val;
     }
+     public static int deletaEndereco(Cliente cliente){
+        int val= 0;
+        try {
+            String sql = "DELETE FROM endereco WHERE cliente_cpf = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,cliente.getCpf());
+            val += ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao deletar endereço!\n"+ e.getMessage());
+        }    
+        return val;
+    }
     public static int atualizaEndereco(Endereco endereco){
         int val= 0;
         try {
-            String sql = "UPDATE enderco SET logradouro =?,numero=?,complemento=?,bairro=?,cidade=?,estado=?,cep=?,cliente_cpf=? WHERE id =?";
+            String sql = "UPDATE endereco SET logradouro =?,numero=?,complemento=?,bairro=?,cidade=?,estado=?,cep=?,cliente_cpf=? WHERE id =?";
             ps = con.prepareStatement(sql);
             ps.setString(1,endereco.getLogradouro());
             ps.setString(2,endereco.getNumero());
@@ -80,26 +94,16 @@ public class EnderecoDAO {
         return val;
     }
     public static List<Endereco> buscaEnderecosDoCLiente(String cpf){
-        Endereco end = new Endereco();
         ArrayList<Endereco> lst = new ArrayList<Endereco>();
         try {
-            String sql = "select id,logradouro,numero,complemento,bairro,cidade,estado,cep, cliente_cpf where cliente_cpf =?";
+            String sql = "select * from endereco where cliente_cpf =?";
             
             ps = con.prepareStatement(sql);
             ps.setString(1,cpf);
             
             rs = ps.executeQuery();
             while(rs.next()){
-                end.setBairro(rs.getString("bairro"));
-                end.setCep(rs.getString("cep"));
-                end.setCidade(rs.getString("cidade"));
-                end.setCliente_cpf(rs.getString("cliente_cpf"));
-                end.setComplemento(rs.getString("complemento"));
-                end.setEstado(rs.getString("estado"));
-                end.setId(rs.getString("id"));
-                end.setLogradouro(rs.getString("logradouro"));
-                end.setNumero(rs.getString("numero"));
-                lst.add(end);
+                lst.add(new Endereco(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)));
             }
             
         } catch (SQLException e) {

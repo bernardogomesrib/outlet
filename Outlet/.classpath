@@ -2,8 +2,17 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/SLF4-api.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-j-8.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/itextpdf-5.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/html2pdf-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/kernel-8.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-8.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/styled-xml-parser-8.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/io-8.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/forms-8.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/hyph-8.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/svg-8.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/layout-8.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

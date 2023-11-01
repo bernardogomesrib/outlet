@@ -1,256 +1,174 @@
 package TELAS;
 
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.JViewport;
+import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.html2pdf.*;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.commons.exceptions.*;
+
+import ENTIDADES.ClienteComEndereco;
 
 
-import com.toedter.calendar.JDateChooser;
-
-import ENTIDADES.Cliente;
-import ENTIDADES.Endereco;
 
 public class PanelTeste extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private JTextField tf_BairroCliente;
-	private JTextField tf_NomeCliente;
-	private JTextField tf_EmailCliente;
-	private JTextField tf_LogradouroCliente;
-	private JTextField tf_NumeroCliente;
-	private JTextField tf_ComplementoCliente;
-	private JTextField tf_CidadeCliente;
-	private Cliente cliente = new Cliente();
-	private Endereco endereco = new Endereco();
-
+	private static final long serialVersionUID = 1L;	
+	private JTextField tf_CidadeClienteConsulta;
+	private JTable table;
+	private JLayeredPane layeredPane;
+	private JScrollPane scrollPaneCliente;
+	private JViewport viewport;
+	
+	private ArrayList<ClienteComEndereco> clienteComEnderecos = new ArrayList<ClienteComEndereco>();
 	/**
 	 * Create the panel.
 	 */
-	public PanelTeste() {
-
+	public void praFrente(){
+		layeredPane.add(this);
+		layeredPane.moveToFront(this);
+	}
+    public PanelTeste(JLayeredPane layeredPane) {
+		this.layeredPane = layeredPane;
+        setBounds(0, 0, 910, 686);
 		
 		setBackground(new Color(255, 255, 255));
 		setLayout(null);
 		
-		JLabel lbl_Titulo = new JLabel("Gerenciamento de Cliente");
-		lbl_Titulo.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-		lbl_Titulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Titulo.setBounds(6, 35, 904, 16);
-		add(lbl_Titulo);
+		JLabel lbl_CidadeClienteConsulta = new JLabel("Cidade");
+		lbl_CidadeClienteConsulta.setBounds(79, 39, 48, 16);
+		add(lbl_CidadeClienteConsulta);
 		
-		JLabel lbl_CPFCliente = new JLabel("CPF");
-		lbl_CPFCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_CPFCliente.setBounds(6, 103, 62, 16);
-		add(lbl_CPFCliente);
+		tf_CidadeClienteConsulta = new JTextField();
+		tf_CidadeClienteConsulta.setBounds(139, 34, 164, 26);
+		add(tf_CidadeClienteConsulta);
+		tf_CidadeClienteConsulta.setColumns(10);
 		
-		JFormattedTextField ftf_CPFCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("###.###.###-##"));
-		ftf_CPFCliente.setBounds(71, 98, 238, 26);
-		add(ftf_CPFCliente);
+		JLabel lbl_EstadoClienteConsulta = new JLabel("Estado");
+		lbl_EstadoClienteConsulta.setBounds(336, 39, 48, 16);
+		add(lbl_EstadoClienteConsulta);
 		
-		JLabel lbl_NomeCliente = new JLabel("Nome");
-		lbl_NomeCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_NomeCliente.setBounds(327, 103, 69, 16);
-		add(lbl_NomeCliente);
-		
-		tf_NomeCliente = new JTextField();
-		tf_NomeCliente.setBounds(396, 98, 491, 26);
-		add(tf_NomeCliente);
-		tf_NomeCliente.setColumns(10);
-		
-		JLabel lbl_DataNascimentoCliente = new JLabel("Data de Nascimento");
-		lbl_DataNascimentoCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_DataNascimentoCliente.setBounds(12, 149, 158, 16);
-		add(lbl_DataNascimentoCliente);
-		
-		JDateChooser dt_DataNascimentoCliente = new JDateChooser();
-		dt_DataNascimentoCliente.setBounds(171, 144, 213, 26);
-		add(dt_DataNascimentoCliente);
-		
-		JLabel lbl_EmailCliente = new JLabel("E-mail");
-		lbl_EmailCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_EmailCliente.setBounds(382, 149, 62, 16);
-		add(lbl_EmailCliente);
-		
-		tf_EmailCliente = new JTextField();
-		tf_EmailCliente.setBounds(456, 144, 431, 26);
-		add(tf_EmailCliente);
-		tf_EmailCliente.setColumns(10);
-		
-		JLabel lbl_TelefoneCliente = new JLabel("Telefone");
-		lbl_TelefoneCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_TelefoneCliente.setBounds(6, 199, 87, 16);
-		add(lbl_TelefoneCliente);
-		
-		JFormattedTextField ftf_TelefoneCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("(##) #####.####"));
-		ftf_TelefoneCliente.setBounds(96, 194, 213, 26);
-		add(ftf_TelefoneCliente);
-		
-		JLabel lbl_EnderecoCliente = new JLabel("Endereço");
-		lbl_EnderecoCliente.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_EnderecoCliente.setBounds(6, 260, 904, 16);
-		add(lbl_EnderecoCliente);
-		
-		JLabel lbl_LogradouroCliente = new JLabel("Logradouro");
-		lbl_LogradouroCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_LogradouroCliente.setBounds(6, 304, 108, 16);
-		add(lbl_LogradouroCliente);
-		
-		tf_LogradouroCliente = new JTextField();
-		tf_LogradouroCliente.setBounds(114, 299, 543, 26);
-		add(tf_LogradouroCliente);
-		tf_LogradouroCliente.setColumns(10);
-		
-		JLabel lbl_NumeroCliente = new JLabel("Número");
-		lbl_NumeroCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_NumeroCliente.setBounds(660, 304, 85, 16);
-		add(lbl_NumeroCliente);
-		
-		tf_NumeroCliente = new JTextField();
-		tf_NumeroCliente.setBounds(757, 299, 130, 26);
-		add(tf_NumeroCliente);
-		tf_NumeroCliente.setColumns(10);
-		
-		JLabel lbl_ComplementoCliente = new JLabel("Complemento");
-		lbl_ComplementoCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_ComplementoCliente.setBounds(0, 349, 126, 16);
-		add(lbl_ComplementoCliente);
-		
-		tf_ComplementoCliente = new JTextField();
-		tf_ComplementoCliente.setBounds(134, 344, 340, 26);
-		add(tf_ComplementoCliente);
-		tf_ComplementoCliente.setColumns(10);
-		
-		JLabel lbl_BairroCliente = new JLabel("Bairro");
-		lbl_BairroCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_BairroCliente.setBounds(486, 349, 48, 16);
-		add(lbl_BairroCliente);
-		
-		tf_BairroCliente = new JTextField();
-		tf_BairroCliente.setBounds(538, 344, 349, 26);
-		add(tf_BairroCliente);
-		tf_BairroCliente.setColumns(10);
-		
-		JLabel lbl_CidadeCliente = new JLabel("Cidade");
-		lbl_CidadeCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_CidadeCliente.setBounds(6, 396, 74, 16);
-		add(lbl_CidadeCliente);
-		
-		tf_CidadeCliente = new JTextField();
-		tf_CidadeCliente.setBounds(84, 391, 265, 26);
-		add(tf_CidadeCliente);
-		tf_CidadeCliente.setColumns(10);
-		
-		JLabel lbl_EstadoCliente = new JLabel("Estado");
-		lbl_EstadoCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_EstadoCliente.setBounds(348, 396, 71, 16);
-		add(lbl_EstadoCliente);
-		
-		JComboBox<String> cb_EstadoCliente = new JComboBox<>();
-		String[] estados = {"Selecione", "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"};
-		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(estados);
-		cb_EstadoCliente.setModel(model);
-		cb_EstadoCliente.setBounds(419, 392, 238, 27);
-		add(cb_EstadoCliente);
-		JLabel lbl_CEPCliente = new JLabel("CEP");
-		lbl_CEPCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_CEPCliente.setBounds(660, 396, 61, 16);
-		add(lbl_CEPCliente);
-		
-		JFormattedTextField ftf_CEPCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("##.###-###"));
-		ftf_CEPCliente.setBounds(721, 391, 166, 26);
-		add(ftf_CEPCliente);
-
-        JButton btn_CadastrarCliente = new JButton("Cadastrar");
-		btn_CadastrarCliente.addActionListener(new ActionListener() {
+		JComboBox<String> cb_EstadoClienteConsulta = new JComboBox<String>();
+		String[] estados = new String[] {"Selecione", "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"};
+		cb_EstadoClienteConsulta.setModel(new DefaultComboBoxModel<String>(estados));
+		cb_EstadoClienteConsulta.setBounds(396, 35, 238, 27);
+		add(cb_EstadoClienteConsulta);
+		table = new JTable();
+		table.setBackground(new Color(255,255,255));								// define a cor de fundo do JTable
+		table.setBounds(0, 88, 910, 590);
+		defineTabela();
+		scrollPaneCliente = new JScrollPane(table);
+		scrollPaneCliente.setLocation(0, 67);
+		scrollPaneCliente.setSize(910, 557);
+		scrollPaneCliente.setPreferredSize(new Dimension(910, 590));							// define a largura e altura do ScrollPane
+		viewport = scrollPaneCliente.getViewport();												// define a cor de fundo do ScrollPane
+		viewport.setBackground(new Color(255,255,255));												// define a cor de fundo do ScrollPane
+		add(scrollPaneCliente);
+		JButton bt_BuscarClienteConsulta = new JButton("Buscar");
+		bt_BuscarClienteConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cliente.setCpf(ftf_CPFCliente.getText());
-				cliente.setNome(tf_NomeCliente.getText());
-				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-				cliente.setDatanascimento(sdf1.format(dt_DataNascimentoCliente.getDate()),false);
-				cliente.setEmail(tf_EmailCliente.getText());
-				cliente.setTelefone(ftf_TelefoneCliente.getText());
-				endereco.setLogradouro(tf_LogradouroCliente.getText());
-				endereco.setNumero(tf_NumeroCliente.getText());
-				endereco.setComplemento(tf_ComplementoCliente.getText());
-				endereco.setBairro(tf_BairroCliente.getText());
-				endereco.setCidade(tf_CidadeCliente.getText());
-				endereco.setEstado((String) cb_EstadoCliente.getSelectedItem());
-				endereco.setCep(ftf_CEPCliente.getText());
-
-				//clientedao.cadastrarCliente(cliente, endereco);
-
-				ftf_CPFCliente.setText("");
-				tf_NomeCliente.setText("");
-				dt_DataNascimentoCliente.setCalendar(null);
-				tf_EmailCliente.setText("");
-				ftf_TelefoneCliente.setText("");
-				tf_LogradouroCliente.setText("");
-				tf_NumeroCliente.setText("");
-				tf_ComplementoCliente.setText("");
-				tf_BairroCliente.setText("");
-				tf_CidadeCliente.setText("");
-				cb_EstadoCliente.setSelectedItem("Selecione");
-				ftf_CEPCliente.setText("");
+				geraDocumento();
+				
 			}
 		});
-		btn_CadastrarCliente.setBounds(151, 518, 117, 29);
-		add(btn_CadastrarCliente);
+		bt_BuscarClienteConsulta.setBounds(667, 34, 117, 29);
+		add(bt_BuscarClienteConsulta);
 		
-		JButton btn_BuscarCliente = new JButton("Buscar");
-		btn_BuscarCliente.addActionListener(new ActionListener() {
+		JButton btnSalvarRelatorio = new JButton("Salvar Relatorio");
+		btnSalvarRelatorio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cliente.setCpf(ftf_CPFCliente.getText());
-				if (cliente.getCpf().equals(null)) {
-					JOptionPane.showMessageDialog(null,"Informe o CPF do cliente!");
-				} else {
-					//clientedao.buscarCliente(cliente, endereco);
-					tf_NomeCliente.setText(cliente.getNome());
-					//dt_DataNascimentoCliente.setDate(cliente.getDatanascimento());
-					tf_EmailCliente.setText(cliente.getEmail());
-					ftf_TelefoneCliente.setText(cliente.getTelefone());
-					tf_LogradouroCliente.setText(endereco.getLogradouro());
-					tf_NumeroCliente.setText(endereco.getNumero());
-					tf_ComplementoCliente.setText(endereco.getComplemento());
-					tf_BairroCliente.setText(endereco.getBairro());
-					tf_CidadeCliente.setText(endereco.getCidade());
-					cb_EstadoCliente.setSelectedItem(endereco.getEstado());
-					ftf_CEPCliente.setText(endereco.getCep());
-				}
+				geraDocumento();
 			}
 		});
-		btn_BuscarCliente.setBounds(296, 518, 117, 29);
-		add(btn_BuscarCliente);
-		
-		JButton btn_AtualizarCliente = new JButton("Atualizar");
-		btn_AtualizarCliente.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btn_AtualizarCliente.setBounds(449, 518, 117, 29);
-		add(btn_AtualizarCliente);
-		
-		JButton btn_ExcluirCliente = new JButton("Excluir");
-		btn_ExcluirCliente.addActionListener(new ActionListener() {		
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btn_ExcluirCliente.setBounds(604, 518, 117, 29);
-		add(btn_ExcluirCliente);
-
-    }
-
+		btnSalvarRelatorio.setBounds(720, 636, 164, 25);
+		add(btnSalvarRelatorio);
 	}
+	public void defineTabela(){
+		DefaultTableModel model = (DefaultTableModel) table.getModel();					//
+		model.addColumn("CPF");																// adiciona a coluna 0
+		model.addColumn("Nome");																// adiciona a coluna 1
+		model.addColumn("Nascimento");														// adiciona a coluna 2
+		model.addColumn("E-mail");															// adiciona a coluna 3
+		model.addColumn("Telefone");															// adiciona a coluna 4
+		model.addColumn("Cidade");															// adiciona a coluna 5
+		model.addColumn("Estado");															// adiciona a coluna 6
+		table.getColumnModel().getColumn(0).setPreferredWidth(100);			// define a largura da coluna 0
+		table.getColumnModel().getColumn(1).setPreferredWidth(150);			// define a largura da coluna 1
+		table.getColumnModel().getColumn(2).setPreferredWidth(80);			// define a largura da coluna 2
+		table.getColumnModel().getColumn(3).setPreferredWidth(150);			// define a largura da coluna 3
+		table.getColumnModel().getColumn(4).setPreferredWidth(80);			// define a largura da coluna 4
+		table.getColumnModel().getColumn(5).setPreferredWidth(100);			// define a largura da coluna 5
+		table.getColumnModel().getColumn(6).setPreferredWidth(30);			// define a largura da coluna 6				
+	}
+	public void preencheouEsvazia(boolean preenche) {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		for(int i = 0;i<model.getRowCount();i++){
+			model.removeRow(0);
+		}			
+		model.setRowCount(0);
+					
+		if (preenche) {
+			// Populate the table with the items
+			/*
+			 * 
+				for (int i = 0;i<itens.size();i++) {
+					model.addRow(new Object[]{produtos.get(i).getCod(),produtos.get(i).getDescricao(),itens.get(i).getQuantidade(),itens.get(i).getSubtotal()});
+				}
+			 */
+			for(int i = 0; i<clienteComEnderecos.size();i++){
+				model.addRow(new Object[]{clienteComEnderecos.get(i).getCliente().getCpf(), clienteComEnderecos.get(i).getCliente().getNome(), clienteComEnderecos.get(i).getCliente().getDatanascimento(false), clienteComEnderecos.get(i).getCliente().getEmail(), clienteComEnderecos.get(i).getCliente().getTelefone(), clienteComEnderecos.get(i).getEndereco().getCidade(), clienteComEnderecos.get(i).getEndereco().getEstado()});
+			}
+		}
+	}
+	public void geraDocumento(){
+    String html = "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body><style>table{width: 99%;}th{background-color: gray;}.cn{background-color: aqua;}table, th, td {border: 1px solid black;border-collapse: collapse;}h1{text-align: center;}</style><h1>Relatório de Clientes</h1><table><thead><tr><th>CPF</th><th>Nome</th><th>Nascimento</th><th>E-mail</th><th>Telefone</th><th>Cidade</th><th>Estado</th></tr></thead><tbody><tr class = ''><td>111.111.111-11</td><td>Bernardo José Gomes Ribeiro</td><td>21/03/1998</td><td>bernardo.j.ribeiro@aluno.senai.br</td><td>(81)9.9700-4384</td><td>Recife</td><td>Pernambuco</td></tr>   <tr class = 'cn'><td>111.111.111-11</td><td>Bernardo José Gomes Ribeiro</td><td>21/03/1998</td><td>bernardo.j.ribeiro@aluno.senai.br</td><td>(81)9.9700-4384</td><td>Recife</td><td>Pernambuco</td></tr><tr class = ''><td>111.111.111-11</td><td>Bernardo José Gomes Ribeiro</td><td>21/03/1998</td><td>bernardo.j.ribeiro@aluno.senai.br</td><td>(81)9.9700-4384</td><td>Recife</td><td>Pernambuco</td></tr><tr class = 'cn'><td>111.111.111-11</td><td>Bernardo José Gomes Ribeiro</td><td>21/03/1998</td><td>bernardo.j.ribeiro@aluno.senai.br</td><td>(81)9.9700-4384</td><td>Recife</td><td>Pernambuco</td></tr></tbody></table></body></html>";
+    try {
+        // cria arquivo temporario
+        File arquivo = File.createTempFile("arquivoTemp", ".html");
+        // Cria um FileWriter para o arquivo
+        FileWriter writer = new FileWriter(arquivo);
+
+        // Escreve a String no arquivo
+        writer.write(html);
+        
+        // Fecha o FileWriter
+        writer.close();
+
+        // Cria um novo documento PDF com tamanho de página paisagem
+        PdfWriter pdfWriter = new PdfWriter("arquivo.pdf");
+        PdfDocument pdfDoc = new PdfDocument(pdfWriter);
+        pdfDoc.setDefaultPageSize(PageSize.A4.rotate());
+
+        // Converte a string HTML para PDF
+        ConverterProperties props = new ConverterProperties();
+        HtmlConverter.convertToPdf(new FileInputStream(arquivo), pdfDoc, props);
+        
+    } catch (IOException|ITextException erro_consulta_cliente) {
+            JOptionPane.showMessageDialog(null, erro_consulta_cliente.getMessage());
+    }
+}
+}
 
 

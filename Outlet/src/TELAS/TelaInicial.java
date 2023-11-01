@@ -17,7 +17,7 @@ import javax.swing.BoxLayout;
 import DATABASE.Conexao;
 import TELAS.PAINEIS.ConsultaCliente;
 import TELAS.PAINEIS.PanelCliente;
-
+import DAO.ClienteComEnderecoDAO;
 import DAO.ClienteDAO;
 import DAO.EnderecoDAO;
 
@@ -43,6 +43,7 @@ public class TelaInicial extends JFrame {
 					Conexao con = new Conexao();
 					ClienteDAO.start(con.getConexao());
 					EnderecoDAO.start(con.getConexao());
+					ClienteComEnderecoDAO.start(con.getConexao());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

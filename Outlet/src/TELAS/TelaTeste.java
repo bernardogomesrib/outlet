@@ -42,15 +42,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JLayeredPane;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 public class TelaTeste extends JFrame {
 
@@ -482,7 +474,6 @@ public class TelaTeste extends JFrame {
 		bt_BuscarClienteConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Document document = new Document(PageSize.A4);     //gerar pdf
 
 				JTable table_ConsultaCliente = new JTable();
 				table_ConsultaCliente.setBackground(new Color(255,255,255));								// define a cor de fundo do JTable
@@ -513,12 +504,7 @@ public class TelaTeste extends JFrame {
 
 				try {
 
-					PdfWriter.getInstance(document, new FileOutputStream("output.pdf"));
-            		document.open();
-            		Paragraph TituloPDF = new Paragraph();
-					TituloPDF.setAlignment(Element.ALIGN_CENTER);
-					TituloPDF.add("Outlet SA\nRelatório de Clientes\n\n");
-					document.add(TituloPDF);	// cabeçalho do pdf		
+			
 					
 					String cidade = tf_CidadeClienteConsulta.getText();
 					String estado = (String) cb_EstadoClienteConsulta.getSelectedItem();
@@ -555,20 +541,14 @@ public class TelaTeste extends JFrame {
 				        String strdatanascimento = sdf.format(datanascimento);
 				        model.addRow(new Object[]{cpf, nome, strdatanascimento, email, telefone, cidadeconsulta, estadoconsulta});
 
-						document.add(new Paragraph("CPF: " + cpf + "\n" +
-                        "Nome: " + nome + "\n" +
-                        "Data de Nascimento: " + strdatanascimento + "\n" +
-                        "Email: " + email + "\n" +
-                        "Telefone: " + telefone + "\n" +
-                        "Cidade: " + cidadeconsulta + "\n" +
-                        "Estado: " + estadoconsulta + "\n\n"));
+					
 						
 				    }
 
-					document.close();								// gerar pdf
+										// gerar pdf
 					
 
-				} catch (Error | SQLException | DocumentException | FileNotFoundException erro_consulta_cliente) {
+				} catch (Error | SQLException erro_consulta_cliente) {
 						System.out.println(erro_consulta_cliente);
 				}
 			}

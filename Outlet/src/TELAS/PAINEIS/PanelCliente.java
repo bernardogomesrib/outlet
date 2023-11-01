@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultComboBoxModel;
@@ -36,8 +37,13 @@ public class PanelCliente extends JPanel {
 	private JTextField tf_NumeroCliente;
 	private JTextField tf_ComplementoCliente;
 	private JTextField tf_CidadeCliente;
+	private JFormattedTextField ftf_CPFCliente;
+	private JFormattedTextField ftf_TelefoneCliente;
+	private JFormattedTextField ftf_CEPCliente;
 	private Cliente cliente = new Cliente();
 	private Endereco endereco = new Endereco();
+	private JDateChooser dt_DataNascimentoCliente;
+	private JComboBox<String> cb_EstadoCliente;
 	
 	private JLayeredPane layeredPane;
 	/**
@@ -51,9 +57,6 @@ public class PanelCliente extends JPanel {
 		
         this.layeredPane = layeredPane;
         setBounds(0, 0, 910, 686);
-		
-		
-		
 		setBackground(new Color(255, 255, 255));
 		setLayout(null);
 		
@@ -68,7 +71,7 @@ public class PanelCliente extends JPanel {
 		lbl_CPFCliente.setBounds(6, 103, 62, 16);
 		add(lbl_CPFCliente);
 		
-		JFormattedTextField ftf_CPFCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("###.###.###-##"));
+		ftf_CPFCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("###.###.###-##"));
 		ftf_CPFCliente.setBounds(71, 98, 238, 26);
 		add(ftf_CPFCliente);
 		
@@ -87,7 +90,7 @@ public class PanelCliente extends JPanel {
 		lbl_DataNascimentoCliente.setBounds(12, 149, 158, 16);
 		add(lbl_DataNascimentoCliente);
 		
-		JDateChooser dt_DataNascimentoCliente = new JDateChooser();
+		dt_DataNascimentoCliente = new JDateChooser();
 		dt_DataNascimentoCliente.setBounds(171, 144, 213, 26);
 		add(dt_DataNascimentoCliente);
 		
@@ -106,7 +109,7 @@ public class PanelCliente extends JPanel {
 		lbl_TelefoneCliente.setBounds(6, 199, 87, 16);
 		add(lbl_TelefoneCliente);
 		
-		JFormattedTextField ftf_TelefoneCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("(##) #####.####"));
+		ftf_TelefoneCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("(##) #####.####"));
 		ftf_TelefoneCliente.setBounds(96, 194, 213, 26);
 		add(ftf_TelefoneCliente);
 		
@@ -170,7 +173,7 @@ public class PanelCliente extends JPanel {
 		lbl_EstadoCliente.setBounds(348, 396, 71, 16);
 		add(lbl_EstadoCliente);
 		
-		JComboBox<String> cb_EstadoCliente = new JComboBox<>();
+		cb_EstadoCliente = new JComboBox<>();
 		String[] estados = {"Selecione", "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará", "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima", "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"};
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(estados);
 		cb_EstadoCliente.setModel(model);
@@ -181,42 +184,20 @@ public class PanelCliente extends JPanel {
 		lbl_CEPCliente.setBounds(660, 396, 61, 16);
 		add(lbl_CEPCliente);
 		
-		JFormattedTextField ftf_CEPCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("##.###-###"));
+		ftf_CEPCliente = new JFormattedTextField(GerenciamentoPedido.Mascara("##.###-###"));
 		ftf_CEPCliente.setBounds(721, 391, 166, 26);
 		add(ftf_CEPCliente);
 
         JButton btn_CadastrarCliente = new JButton("Cadastrar");
 		btn_CadastrarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cliente.setCpf(ftf_CPFCliente.getText());
-				cliente.setNome(tf_NomeCliente.getText());
-				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-				cliente.setDatanascimento(sdf1.format(dt_DataNascimentoCliente.getDate()),false);
-				cliente.setEmail(tf_EmailCliente.getText());
-				cliente.setTelefone(ftf_TelefoneCliente.getText());
-				endereco.setLogradouro(tf_LogradouroCliente.getText());
-				endereco.setNumero(tf_NumeroCliente.getText());
-				endereco.setComplemento(tf_ComplementoCliente.getText());
-				endereco.setBairro(tf_BairroCliente.getText());
-				endereco.setCidade(tf_CidadeCliente.getText());
-				endereco.setEstado((String) cb_EstadoCliente.getSelectedItem());
-				endereco.setCep(ftf_CEPCliente.getText());
-
-				ClienteDAO.insereCliente(cliente);
-				EnderecoDAO.insereEndereco(endereco);
-
-				ftf_CPFCliente.setText("");
-				tf_NomeCliente.setText("");
-				dt_DataNascimentoCliente.setCalendar(null);
-				tf_EmailCliente.setText("");
-				ftf_TelefoneCliente.setText("");
-				tf_LogradouroCliente.setText("");
-				tf_NumeroCliente.setText("");
-				tf_ComplementoCliente.setText("");
-				tf_BairroCliente.setText("");
-				tf_CidadeCliente.setText("");
-				cb_EstadoCliente.setSelectedItem("Selecione");
-				ftf_CEPCliente.setText("");
+				pegaInformacoes();
+				int val = ClienteDAO.insereCliente(cliente);
+				val+= EnderecoDAO.insereEndereco(endereco);
+				if(val>=1){
+					JOptionPane.showMessageDialog(null, "Deu tudo certo");
+					apagaOudefine(true);
+				}				
 			}
 		});
 		btn_CadastrarCliente.setBounds(151, 518, 117, 29);
@@ -230,18 +211,12 @@ public class PanelCliente extends JPanel {
 					JOptionPane.showMessageDialog(null,"Informe o CPF do cliente!");
 				} else {
 					cliente = ClienteDAO.buscaCliente(cliente.getCpf());
-					endereco = EnderecoDAO.buscaEnderecosDoCLiente(cliente.getCpf()).get(0);
-					tf_NomeCliente.setText(cliente.getNome());
-					dt_DataNascimentoCliente.setDateFormatString(cliente.getDatanascimento(true));
-					tf_EmailCliente.setText(cliente.getEmail());
-					ftf_TelefoneCliente.setText(cliente.getTelefone());
-					tf_LogradouroCliente.setText(endereco.getLogradouro());
-					tf_NumeroCliente.setText(endereco.getNumero());
-					tf_ComplementoCliente.setText(endereco.getComplemento());
-					tf_BairroCliente.setText(endereco.getBairro());
-					tf_CidadeCliente.setText(endereco.getCidade());
-					cb_EstadoCliente.setSelectedItem(endereco.getEstado());
-					ftf_CEPCliente.setText(endereco.getCep());
+					try {
+						endereco = EnderecoDAO.buscaEnderecosDoCLiente(cliente.getCpf()).get(0);
+					} catch (Exception zzz) {
+						System.out.println("pipipo");
+					}
+					apagaOudefine(false);
 				}
 			}
 		});
@@ -251,6 +226,7 @@ public class PanelCliente extends JPanel {
 		JButton btn_AtualizarCliente = new JButton("Atualizar");
 		btn_AtualizarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 			}
 		});
 		btn_AtualizarCliente.setBounds(449, 518, 117, 29);
@@ -259,13 +235,78 @@ public class PanelCliente extends JPanel {
 		JButton btn_ExcluirCliente = new JButton("Excluir");
 		btn_ExcluirCliente.addActionListener(new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {
+				pegaInformacoes();
+				int val = ClienteDAO.deletaCliente(cliente);
+				val += EnderecoDAO.deletaEndereco(cliente);
+				if(val>=1){
+					JOptionPane.showMessageDialog(null, "Ok");
+					apagaOudefine(true);
+				}
 			}
 		});
 		btn_ExcluirCliente.setBounds(604, 518, 117, 29);
 		add(btn_ExcluirCliente);
 
     }
-
+	private void apagaOudefine(boolean apaga){
+    if(apaga){
+        ftf_CPFCliente.setText("");
+        tf_NomeCliente.setText("");
+        dt_DataNascimentoCliente.setCalendar(null);
+        tf_EmailCliente.setText("");
+        ftf_TelefoneCliente.setText("");
+        tf_LogradouroCliente.setText("");
+        tf_NumeroCliente.setText("");
+        tf_ComplementoCliente.setText("");
+        tf_BairroCliente.setText("");
+        tf_CidadeCliente.setText("");
+        cb_EstadoCliente.setSelectedItem("Selecione");
+        ftf_CEPCliente.setText("");
+    }else{
+        tf_NomeCliente.setText(cliente.getNome());
+		// Converte a data de String para java.util.Date
+        String dataString = cliente.getDatanascimento(true);
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date data = null;
+        try {
+            data = formato.parse(dataString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dt_DataNascimentoCliente.setDate(data);
+        tf_EmailCliente.setText(cliente.getEmail());
+        ftf_TelefoneCliente.setText(cliente.getTelefone());
+        tf_LogradouroCliente.setText(endereco.getLogradouro());
+        tf_NumeroCliente.setText(endereco.getNumero());
+        tf_ComplementoCliente.setText(endereco.getComplemento());
+        tf_BairroCliente.setText(endereco.getBairro());
+        tf_CidadeCliente.setText(endereco.getCidade());
+        cb_EstadoCliente.setSelectedItem(endereco.getEstado());
+        ftf_CEPCliente.setText(endereco.getCep());
+    }
+}
+	public void pegaInformacoes(){
+		cliente.setCpf(ftf_CPFCliente.getText());
+		cliente.setNome(tf_NomeCliente.getText());
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		try {			
+			cliente.setDatanascimento(sdf1.format(dt_DataNascimentoCliente.getDate()),true);
+		} catch (Exception e) {
+			System.out.println("erro na data");
+		}
+		System.out.println(cliente.getDatanascimento(false));
+		cliente.setEmail(tf_EmailCliente.getText());
+		cliente.setTelefone(ftf_TelefoneCliente.getText());
+		endereco.setLogradouro(tf_LogradouroCliente.getText());
+		endereco.setNumero(tf_NumeroCliente.getText());
+		endereco.setComplemento(tf_ComplementoCliente.getText());
+		endereco.setBairro(tf_BairroCliente.getText());
+		endereco.setCidade(tf_CidadeCliente.getText());
+		endereco.setEstado((String) cb_EstadoCliente.getSelectedItem());
+		endereco.setCep(ftf_CEPCliente.getText());
+		endereco.setCliente_cpf(ftf_CPFCliente.getText());
+	
 	}
+}
 
 

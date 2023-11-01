@@ -31,6 +31,18 @@ ENGINE = InnoDB; */
     private String estado;
     private String cep;
     private String cliente_cpf;
+    public Endereco(){}
+    public Endereco(String id,String logradouro,String numero,String complemento,String bairro,String cidade,String estado,String cep,String cliente_cpf){
+        this.id = id;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+        this.cliente_cpf = cliente_cpf;
+    }
     public String getId() {
         return id;
     }
