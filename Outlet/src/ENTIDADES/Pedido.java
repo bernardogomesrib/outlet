@@ -24,19 +24,26 @@ ENGINE = InnoDB; */
         this.id = id;
     }
     public String getData(boolean invertido) {
-        if(invertido){
-            
-            String[] dividido = this.data.split("/");
-            String dt = dividido[2]+"-"+dividido[1]+"-"+dividido[0];            
+        if(invertido){            
+        
+            String dt ="";
+            try {
+                System.out.println(data);
+                dt = data.substring(6, 10)+"-"+data.substring(3, 5)+"-"+data.substring(0, 2)+" "+data.substring(13,data.length()-1);    
+            } catch (Exception e) {
+                System.out.println("exeption no pedido.getdata(invertido:true)");
+                System.out.println(dt);               
+            }            
+            System.out.println(dt);
             return dt;
         }else{
+            System.out.println(data);
             return data;
         }
     }
     public void setData(String data,boolean invertido) {
-        if(invertido){
-            String[] dividido = data.split("-");
-            this.data = dividido[2]+"/"+dividido[1]+"/"+dividido[0];
+        if(invertido){            
+            this.data = data.substring(8,10)+"/"+data.substring(5,7)+"/"+data.substring(0,4)+" as"+data.substring(10, data.length());
         }else{
             this.data = data;
         }

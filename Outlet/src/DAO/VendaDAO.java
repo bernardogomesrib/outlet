@@ -15,6 +15,31 @@ public class VendaDAO {
     public static void start(Connection conn){
         con = conn;
     }
+   /*
+     public static int insere(Pedido pedido){
+        String sql = "SELECT numero FROM venda ORDER BY numero DESC LIMIT 1";
+        int num =1;
+        int vl = 0;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                num+= rs.getInt(1);
+            }
+            sql = "INSERT INTO venda(numero,data,formapagamento,total,pedido_id) values(?,CURRENT_TIMESTAMP,?,?,?)";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, ""+num);
+            ps.setString(2, venda.getFormapagamento());
+            ps.setDouble(3, venda.getTotal());
+            ps.setString(4, venda.getPedido_id());
+
+            vl = ps.executeUpdate();
+        } catch (SQLException e) {
+           JOptionPane.showMessageDialog(null, "Erro ao inserir venda!\n"+ e.getMessage());
+        }
+        return vl;
+    }
+    */
     public static int insere(Venda venda){
          /*private String 
      *  -----------------------------------------------------

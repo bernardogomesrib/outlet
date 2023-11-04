@@ -15,6 +15,24 @@ public class PedidoDAO {
     public static void start(Connection conn){
         con = conn;
     }
+    private static int ehoerro(Pedido pedido){
+          int vl = 0;
+        try {
+           
+            String sql = "INSERT INTO pedido(id,data,cliente_cpf) values (?,CURRENT_TIMESTAMP,?)";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,pedido.getId());
+            ps.setString(2,pedido.getCliente_cpf());
+            vl += ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao criar pedido!\n"+ e.getMessage());
+        } catch(NullPointerException e){                  
+            JOptionPane.showMessageDialog(null, "Erro ao criar pedido!\n Não deixe nem um campo vazio!");
+        }
+
+        return vl;
+    }
     public static int insere(Pedido pedido){
          /*-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `outlet`.`pedido` (
@@ -30,18 +48,27 @@ CREATE TABLE IF NOT EXISTS `outlet`.`pedido` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB; */
         int vl = 0;
+        boolean invertido = true;
         try {
-            String sql = "INSERT INTO pedido(id,data,cliente_cpf) values (?,?,?)";
+            if(pedido.getData(true).equals("")||pedido.getData(true).equals("    -  -  ")||pedido.getData(false).equals(null)){
+                pedido.setData("CURRENT_TIMESTAMP", false);
+                invertido = false;
+            }
+            String sql = "INSERT INTO pedido(id,data,cliente_cpf) values (?,"+pedido.getData(invertido)+",?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1,pedido.getId());
-            ps.setString(2,pedido.getData(true));
-            ps.setString(3,pedido.getCliente_cpf());
+            ps.setString(1,pedido.getId());           
+            ps.setString(2,pedido.getCliente_cpf());
             vl += ps.executeUpdate();
             
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao criar pedido!\n"+ e.getMessage());
         } catch(NullPointerException e){
-            JOptionPane.showMessageDialog(null, "Erro ao criar pedido!\n Não deixe nem um campo vazio!");
+            pedido.setData("CURRENT_DATA", false);
+            try {
+                vl+=ehoerro(pedido);    
+            } catch (Exception z) {
+                JOptionPane.showMessageDialog(null, "ai é complicado... sei como deu erro não.");
+            }
         }
 
         return vl;

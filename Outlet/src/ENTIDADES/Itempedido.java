@@ -1,5 +1,7 @@
 package ENTIDADES;
 
+import java.text.DecimalFormat;
+
 public class Itempedido {
     /*
      * CREATE TABLE IF NOT EXISTS `outlet`.`itempedido` (
@@ -67,7 +69,11 @@ ENGINE = InnoDB;
       this.valor = valor;
     }
     public double getSubtotal() {
-      return subtotal;
+      return this.subtotal;
+    }
+    public String getSubtotalf(){
+      DecimalFormat df = new DecimalFormat("0.00");
+      return "R$ "+df.format(this.subtotal);
     }
     public void setSubtotal(double subtotal) {
       this.subtotal = subtotal;

@@ -1,54 +1,60 @@
 package TELAS;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.commons.exceptions.ITextException;
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+
+import DAO.RelatorioPedidoDAO;
+import ENTIDADES.ConsultaPedido;
+import ENTIDADES.Fornecedor;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
-import java.awt.event.KeyAdapter;
-
-import DAO.ItempedidoDAO;
-import DAO.PedidoDAO;
-import DAO.ProdutoDao;
-
-import ENTIDADES.Itempedido;
-import ENTIDADES.Pedido;
-import ENTIDADES.Produto;
-
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
-import javax.swing.plaf.DimensionUIResource;
+
 
 public class PanelTeste extends JPanel {
-
-	private static final long serialVersionUID = 1L;	
-	private JTextField tf_idp;
-	private JFormattedTextField tf_cpf;
-	private JFormattedTextField tf_data;
-	private JTextField tf_cod;
-	private JTextField tf_quantidade;
-	private JTable table;
-	private Produto produto = new Produto();
-	private Pedido pedido =  new Pedido();
-	private Itempedido item = new Itempedido();
-	private ArrayList<Itempedido> itens = new ArrayList<Itempedido>();
-	private ArrayList<Produto> produtos = new ArrayList<Produto>();
-	private String qnt;
-	private boolean ja_tinha_itens_no_pedido= false;
 	private JLayeredPane layeredPane;
+	Fornecedor fornecedor = new Fornecedor();
+	private JTextField tf_datamin;
+	private JTextField tf_datamax;
+	private JTextField tf_cpfs;
+	private JTextField tf_quantMin;
+	private JTextField tf_quantMax;
+	private JTextField tf_cods;
+	private JTextField tf_subtotalMax;
+	private JTextField tf_subtotalmin;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTable table;
+	private ArrayList<ConsultaPedido> pedidosConsultados = new ArrayList<ConsultaPedido>();
+	private JTextField tf_proddismax;
+	private JTextField tf_proddismin;
+	private JRadioButton rdbtnPeloMenosUm;
+	private JCheckBox chckbxVendaCompletada;
 	/**
 	 * Create the panel.
 	 */
@@ -61,364 +67,312 @@ public class PanelTeste extends JPanel {
 		setBounds(0, 0, 910, 686);		
 		setBackground(new Color(255, 255, 255));
 		setLayout(null);
+		table = new JTable();
+		table.setBackground(new Color(255,255,255));
+		table.setBounds(0, 0, 886, 510);
+		defineTabela();
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(12, 119, 886, 510);
+		add(scrollPane);
+		
+		JButton btnSalvarRelatrio = new JButton("Salvar Relatório");
+		btnSalvarRelatrio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				geraDocumento();
+			}
+		});
+		btnSalvarRelatrio.setBounds(711, 649, 187, 25);
+		add(btnSalvarRelatrio);
+		
+		JLabel lblQuantidadeDeItens = new JLabel("Quantidade de itens| produtos distintos");
+		lblQuantidadeDeItens.setBounds(187, 4, 287, 15);
+		add(lblQuantidadeDeItens);
+		
+		JLabel lblContemNoPedido = new JLabel("Contem no pedido certo produto:");
+		lblContemNoPedido.setBounds(665, 4, 236, 15);
+		add(lblContemNoPedido);
+		
+		JLabel lblSubtotal = new JLabel("Subtotal:");
+		lblSubtotal.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSubtotal.setBounds(486, 4, 167, 15);
+		add(lblSubtotal);
+		
+		JButton btnPesquisar = new JButton("Pesquisar");
+		btnPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int quantmin = 1;
+				int quantmax = 0;
+				double subtotalmin = 0;
+				double subtotalmax = 0;
+				int pquantmin = 1;
+				int pquantmax = 0;
+				try {
+					if(!tf_quantMin.getText().equals("")){
+					quantmin = Integer.parseInt(tf_quantMin.getText());
+					}
+					if(!tf_quantMax.getText().equals("")){
+						quantmax = Integer.parseInt(tf_quantMax.getText());
+					}
+					if(!tf_subtotalmin.getText().equals("")){
+						subtotalmin = Double.parseDouble(tf_subtotalmin.getText());
+					}
+					if(!tf_subtotalMax.getText().equals("")){
+						subtotalmax = Double.parseDouble(tf_subtotalMax.getText());
+					}
+					if(!tf_proddismin.getText().equals("")){
+						pquantmin = Integer.parseInt(tf_proddismin.getText());
+					}
+					if(!tf_proddismax.getText().equals("")){
+						pquantmax = Integer.parseInt(tf_proddismax.getText());
+					}					
+					pedidosConsultados = RelatorioPedidoDAO.procura(pquantmin,pquantmax,tf_cpfs.getText(),tf_datamin.getText(),tf_datamax.getText(),chckbxVendaCompletada.isSelected(),quantmin,quantmax,subtotalmin,subtotalmax,tf_cods.getText(),rdbtnPeloMenosUm.isSelected());
+					
+					preencheouEsvazia(true);
+					
+				} catch (Exception rrr) {
+					JOptionPane.showMessageDialog(null, "Preencha corretamente os campos!"+rrr.getMessage());
+				}
+				
+				
+			}
+		});
+		btnPesquisar.setBounds(582, 649, 117, 25);
+		add(btnPesquisar);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(119, 118, 123));
-		panel.setBounds(32, 112, 398, 446);
+		panel.setBounds(12, 24, 171, 85);
 		add(panel);
 		panel.setLayout(null);
 		
-		tf_idp = new JTextField();
-		tf_idp.setBounds(183, 12, 180, 19);
-		panel.add(tf_idp);
-		tf_idp.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				pedido.setId(tf_idp.getText());
-			}
-		});
-		tf_idp.setColumns(10);
+		JLabel lblMin = new JLabel("Min:");
+		lblMin.setBounds(12, 14, 51, 15);
+		panel.add(lblMin);
 		
-		JLabel lblIdDoPedido = new JLabel("Id do pedido");
-		lblIdDoPedido.setBounds(58, 12, 104, 15);
-		panel.add(lblIdDoPedido);
-		lblIdDoPedido.setHorizontalAlignment(SwingConstants.RIGHT);
+		tf_datamin = new JTextField();
+		tf_datamin.setBounds(64, 12, 94, 19);
+		panel.add(tf_datamin);
+		tf_datamin.setColumns(10);
 		
-		tf_cpf = new JFormattedTextField(Mascara("###.###.###-##"));
-		tf_cpf.setBounds(183, 40, 180, 19);
-		panel.add(tf_cpf);
-		tf_cpf.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				pedido.setCliente_cpf(tf_cpf.getText());
-			}
-		});
-		tf_cpf.setColumns(10);
+		JLabel lblDataMaxima = new JLabel("Max:");
+		lblDataMaxima.setBounds(12, 35, 51, 15);
+		panel.add(lblDataMaxima);
 		
-		JLabel lblCpfDoCliente = new JLabel("CPf do cliente");
-		lblCpfDoCliente.setBounds(58, 42, 107, 15);
-		panel.add(lblCpfDoCliente);
-		lblCpfDoCliente.setHorizontalAlignment(SwingConstants.RIGHT);
+		tf_datamax = new JTextField();
+		tf_datamax.setBounds(64, 33, 94, 19);
+		panel.add(tf_datamax);
+		tf_datamax.setColumns(10);
 		
-		tf_data = new JFormattedTextField(Mascara("##/##/####"));
-		tf_data.setBounds(183, 71, 180, 19);
-		panel.add(tf_data);
-		tf_data.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				pedido.setData(tf_data.getText(), false);
-			}
-		});
-		tf_data.setColumns(10);
+		JLabel lblCpf = new JLabel("CPF:");
+		lblCpf.setBounds(12, 62, 51, 15);
+		panel.add(lblCpf);
 		
-		JLabel lblData = new JLabel("Data");
-		lblData.setBounds(92, 73, 70, 15);
-		panel.add(lblData);
-		lblData.setHorizontalAlignment(SwingConstants.RIGHT);
+		tf_cpfs = new JTextField();
+		tf_cpfs.setBounds(64, 62, 94, 19);
+		panel.add(tf_cpfs);
+		tf_cpfs.setColumns(10);
 		
-		JButton btnCriar = new JButton("Criar");
-		btnCriar.setBounds(12, 100, 68, 25);
-		panel.add(btnCriar);
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(187, 24, 277, 85);
+		add(panel_1);
+		panel_1.setLayout(null);
 		
-		JButton btnProcurar = new JButton("Procurar");
-		btnProcurar.setBounds(91, 100, 95, 25);
-		panel.add(btnProcurar);
+		chckbxVendaCompletada = new JCheckBox("Venda completada");
+		chckbxVendaCompletada.setBounds(8, 54, 166, 23);
+		panel_1.add(chckbxVendaCompletada);
 		
-		JButton btnEditar = new JButton("Editar");
-		btnEditar.setBounds(199, 100, 76, 25);
-		panel.add(btnEditar);
+		JLabel lblMin_1 = new JLabel("Min:");
+		lblMin_1.setBounds(12, 14, 51, 15);
+		panel_1.add(lblMin_1);
 		
-		JButton btnExcluir = new JButton("Excluir");
-		btnExcluir.setBounds(284, 100, 79, 25);
-		panel.add(btnExcluir);
+		tf_quantMin = new JTextField();
+		tf_quantMin.setBounds(56, 12, 76, 19);
+		panel_1.add(tf_quantMin);
+		tf_quantMin.setColumns(10);
 		
-		JPanel panelProdutos = new JPanel();
-		panelProdutos.setBackground(new Color(119, 118, 123));
-		panelProdutos.setBounds(12, 137, 374, 108);
-		panel.add(panelProdutos);
-		panelProdutos.setLayout(null);
+		JLabel lblDataMaxima_1 = new JLabel("Max:");
+		lblDataMaxima_1.setBounds(12, 34, 51, 15);
+		panel_1.add(lblDataMaxima_1);
 		
-		tf_cod = new JTextField();
-		tf_cod.setBounds(167, 45, 180, 19);
-		panelProdutos.add(tf_cod);
-		tf_cod.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				produto.setCod(tf_cod.getText());
-			}
-		});
-		tf_cod.setColumns(10);
+		tf_quantMax = new JTextField();
+		tf_quantMax.setBounds(56, 32, 76, 19);
+		panel_1.add(tf_quantMax);
+		tf_quantMax.setColumns(10);
 		
-		JLabel lblIdDoProduto = new JLabel("id do produto");
-		lblIdDoProduto.setBounds(12, 47, 134, 15);
-		panelProdutos.add(lblIdDoProduto);
-		lblIdDoProduto.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel lblMin_1_2 = new JLabel("Min:");
+		lblMin_1_2.setBounds(144, 16, 51, 15);
+		panel_1.add(lblMin_1_2);
 		
-		tf_quantidade = new JTextField();
-		tf_quantidade.setBounds(169, 77, 180, 19);
-		panelProdutos.add(tf_quantidade);
-		tf_quantidade.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {				
-				qnt = tf_quantidade.getText();					
-				String trueNum ="";
-				for(int i = 0;i<qnt.length();i++){
-					char a = qnt.charAt(i);
-					try {
-						int b = Integer.parseInt(""+a);
-						trueNum+=""+b;
-						item.setQuantidade(Integer.parseInt(trueNum));
-					} catch (Exception yyys) {
-						System.out.println(yyys.getMessage());		
-					}
-				}
-				tf_quantidade.setText(trueNum);
-			}
-		});
-		tf_quantidade.setColumns(10);
+		tf_proddismin = new JTextField();
+		tf_proddismin.setBounds(196, 14, 76, 19);
+		panel_1.add(tf_proddismin);
+		tf_proddismin.setColumns(10);
 		
-		JLabel lblQuantidade = new JLabel("Quantidade");
-		lblQuantidade.setBounds(24, 77, 124, 15);
-		panelProdutos.add(lblQuantidade);
-		lblQuantidade.setHorizontalAlignment(SwingConstants.RIGHT);
+		tf_proddismax = new JTextField();
+		tf_proddismax.setBounds(196, 34, 76, 19);
+		panel_1.add(tf_proddismax);
+		tf_proddismax.setColumns(10);
 		
-		JLabel lblProdutosParaO = new JLabel("Produtos para o pedido");
-		lblProdutosParaO.setBounds(23, 0, 326, 33);
-		panelProdutos.add(lblProdutosParaO);
-		lblProdutosParaO.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblProdutosParaO.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel lblDataMaxima_1_2 = new JLabel("Max:");
+		lblDataMaxima_1_2.setBounds(144, 36, 51, 15);
+		panel_1.add(lblDataMaxima_1_2);
 		
-		JButton btnInserir = new JButton("Inserir");
-		btnInserir.setBounds(12, 257, 95, 25);
-		panel.add(btnInserir);
+		JLabel lblDataDoPedido = new JLabel("Data dos pedidos");
+		lblDataDoPedido.setBounds(12, 4, 171, 15);
+		add(lblDataDoPedido);
 		
-		JButton btnExcluir_1 = new JButton("Excluir");
-		btnExcluir_1.setBounds(119, 257, 114, 25);
-		panel.add(btnExcluir_1);
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(470, 24, 196, 85);
+		add(panel_2);
+		panel_2.setLayout(null);
 		
-		JButton btnEditar_1 = new JButton("Editar");
-		btnEditar_1.setBounds(245, 257, 117, 25);
-		panel.add(btnEditar_1);
+		JLabel lblMin_1_1 = new JLabel("Min:");
+		lblMin_1_1.setBounds(12, 14, 51, 15);
+		panel_2.add(lblMin_1_1);
 		
-		JButton btnConcluirCompra = new JButton("Concluir pedido");
-		btnConcluirCompra.setBounds(12, 323, 164, 25);
-		panel.add(btnConcluirCompra);
+		tf_subtotalmin = new JTextField();
+		tf_subtotalmin.setBounds(64, 12, 114, 19);
+		panel_2.add(tf_subtotalmin);
+		tf_subtotalmin.setColumns(10);
 		
-		JButton btnCancelarPedido = new JButton("Cancelar Pedido");
-		btnCancelarPedido.setBounds(199, 323, 164, 25);
-		panel.add(btnCancelarPedido);
+		tf_subtotalMax = new JTextField();
+		tf_subtotalMax.setBounds(64, 32, 114, 19);
+		panel_2.add(tf_subtotalMax);
+		tf_subtotalMax.setColumns(10);
 		
-		JButton btnFinalizarCompra = new JButton("Finalizar compra");
-		btnFinalizarCompra.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnFinalizarCompra.setBounds(12, 396, 351, 25);
-		panel.add(btnFinalizarCompra);
-
-		table = new JTable();
-		table.setBounds(0, 0, 450, 555);
-		defineTabela();
+		JLabel lblDataMaxima_1_1 = new JLabel("Max:");
+		lblDataMaxima_1_1.setBounds(12, 34, 51, 15);
+		panel_2.add(lblDataMaxima_1_1);
 		
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(456, 50, 450, 555);
-		scrollPane.setPreferredSize(new DimensionUIResource(450, 555)); // define a largura e altura do ScrollPane
-		JViewport viewport = scrollPane.getViewport(); // define a cor de fundo do ScrollPane
-		viewport.setBackground(new Color(255,255,255)); 
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(675, 24, 223, 85);
+		add(panel_3);
+		panel_3.setLayout(null);
 		
-		add(scrollPane);
+		tf_cods = new JTextField();
+		tf_cods.setBounds(59, 12, 114, 19);
+		panel_3.add(tf_cods);
+		tf_cods.setColumns(10);
 		
-		JLabel lblGerenciamentoDePedidos = new JLabel("Gerenciamento de pedidos");
-		lblGerenciamentoDePedidos.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblGerenciamentoDePedidos.setHorizontalAlignment(SwingConstants.CENTER);
-		lblGerenciamentoDePedidos.setBounds(32, 51, 390, 32);
-		add(lblGerenciamentoDePedidos);
-		btnCancelarPedido.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(ja_tinha_itens_no_pedido){
-					if(ItempedidoDAO.deletaItensdoPedido(tf_idp.getText())>=1){
-						itens.clear();
-						produtos.clear(); 
-						JOptionPane.showMessageDialog(null,"Itens deletados do pedido.");
-						preencheouEsvazia(false);
-					}else{
-						itens.clear();
-						produtos.clear(); 
-						preencheouEsvazia(false);
-					}
-				}else{
-					itens.clear();
-					produtos.clear();
-					JOptionPane.showMessageDialog(null,"Itens deletados do pedido.");
-					preencheouEsvazia(false);
-				}
-			}
-		});
-		btnConcluirCompra.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				double somas =0;
-				for (Itempedido itempedido : itens) {
-					somas+=itempedido.getSubtotal();
-				}
-				model.addRow(new Object[]{"","Total:","",somas});
-				if(ja_tinha_itens_no_pedido){
-					for (Itempedido ite : itens) {
-						ItempedidoDAO.deleta(ite);
-					}
-					if(ItempedidoDAO.colocarvarios(itens,produtos)>=1){
-						JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
-						ja_tinha_itens_no_pedido = true;
-					}
-				}else{
-					if(ItempedidoDAO.colocarvarios(itens,produtos)>=1){
-						JOptionPane.showMessageDialog(null,"Itens inseridos com sucesso");
-						ja_tinha_itens_no_pedido = true;
-					}
-				}
-			}
-		});
-		btnEditar_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int local = procurapeloid(tf_cod.getText());
-				if(local == -9999){
-					JOptionPane.showMessageDialog(null, "não foi encontrado o produto");
-				}else{
-					itens.get(local).setQuantidadenova(Integer.parseInt(tf_quantidade.getText()));
-					preencheouEsvazia(true);
-				}
-			}
-		});
-		btnExcluir_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int idRemovido = procurapeloid(tf_cod.getText());
-				itens.remove(idRemovido);
-				produtos.remove(idRemovido);
-				preencheouEsvazia(true);
-			}
-		});
-		btnInserir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String estado = tf_quantidade.getText();;
-				produto = ProdutoDao.busca(produto.getCod());
-				try {
-					if(!produto.getDescricao().equals("")){					
-						item.setPedido_id(pedido.getId());
-						item.setProduto_cod(produto.getCod());
-						item.setValor(Double.parseDouble(""+produto.getPreco()));					
-						int qnt = item.getQuantidade();
-						double vl = item.getValor();
-						System.out.println("quantidade: "+qnt+"\nValor: "+vl);
-						int local = procurapeloid(item.getProduto_cod());
-						if(!(item.getQuantidade()==0)){							
-							if(-9999 == local){
-								produtos.add(produto);
-								item.setSubtotal(vl*qnt);
-								itens.add(new Itempedido(item.getPedido_id(),item.getProduto_cod(),item.getQuantidade(),item.getValor(),item.getSubtotal()));
-							}else{							
-								itens.get(local).addMaisQuantidade(qnt);
-							}						
-							preencheouEsvazia(true);
-					}else{
-						JOptionPane.showMessageDialog(null, "Qual a quantidade?");
-					}
-				}
-				} catch (NullPointerException zxc) {
-					JOptionPane.showMessageDialog(null, "Produto não encontrado");
-				}
-				
-				tf_quantidade.setText(estado);
-			}
-		});
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(PedidoDAO.deleta(pedido)==1){
-					JOptionPane.showMessageDialog(null, "Pedido apagado");
-				}
-			}
-		});
-		btnEditar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(PedidoDAO.atualiza(pedido)==1){
-					JOptionPane.showMessageDialog(null, "Pedido atualizado");
-				}
-			}
-		});
-		btnProcurar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pedido = PedidoDAO.buscaClienteDoPedido(pedido.getId());
-				pedidoNaTela();
-				itens = ItempedidoDAO.buscaItensDoPedido(pedido.getId());
-				if(itens.size()!=0){
-					ja_tinha_itens_no_pedido = true;
-					System.out.println(itens.size());
-					produtos = ProdutoDao.procuraProdutos(itens);
-					try {
-						preencheouEsvazia(true);	
-					} catch (Exception yyy) {
-						System.out.println("oop");
-					}					
-				}
-			}
-		});
-		btnCriar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(PedidoDAO.insere(pedido)==1){
-					JOptionPane.showMessageDialog(null, "Pedido criado");
-				}
-			}
-		});		
-	}
+		JLabel lblCod = new JLabel("COD:");
+		lblCod.setBounds(12, 14, 51, 15);
+		panel_3.add(lblCod);
+		
+		rdbtnPeloMenosUm = new JRadioButton("pelo menos um");
+		rdbtnPeloMenosUm.setBounds(12, 32, 164, 19);
+		panel_3.add(rdbtnPeloMenosUm);
+		buttonGroup.add(rdbtnPeloMenosUm);
+		
+		JRadioButton rdbtnContemTodos = new JRadioButton("contem todos");
+		rdbtnContemTodos.setBounds(12, 52, 164, 19);
+		panel_3.add(rdbtnContemTodos);
+		rdbtnContemTodos.setSelected(true);
+		buttonGroup.add(rdbtnContemTodos);
+    }
 	public void defineTabela(){
-		DefaultTableModel model = (DefaultTableModel) table.getModel(); //
-		model.addColumn("id");
-		model.addColumn("Descrição"); // adiciona a coluna 0
-		model.addColumn("Qnt"); // adiciona a coluna 1
-		model.addColumn("Preço"); // adiciona a coluna 2
-		table.getColumnModel().getColumn(0).setPreferredWidth(30);
-		table.getColumnModel().getColumn(1).setPreferredWidth(300); // define a largura da coluna 0
-		table.getColumnModel().getColumn(2).setPreferredWidth(30); // define a largura da coluna 1
-		table.getColumnModel().getColumn(3).setPreferredWidth(90);
+		DefaultTableModel model = (DefaultTableModel) table.getModel();					//
+		model.addColumn("ID");																// adiciona a coluna 0
+		model.addColumn("CPF");																// adiciona a coluna 1
+		model.addColumn("Data");														// adiciona a coluna 2
+		model.addColumn("SubTotal");															// adiciona a coluna 3
+		model.addColumn("Qnt. de Itns.");
+		model.addColumn("Qnt. de Prods.");
+		model.addColumn("Concluído");
+		table.getColumnModel().getColumn(0).setPreferredWidth(62);
+		table.getColumnModel().getColumn(1).setPreferredWidth(65);
+		table.getColumnModel().getColumn(2).setPreferredWidth(105);
+		table.getColumnModel().getColumn(3).setPreferredWidth(72);
+		table.getColumnModel().getColumn(4).setPreferredWidth(72);
+		table.getColumnModel().getColumn(5).setPreferredWidth(72);
+		table.getColumnModel().getColumn(6).setPreferredWidth(62);
 	}
-	public static MaskFormatter Mascara(String Mascara){
-        
-		MaskFormatter F_Mascara = new MaskFormatter();
-		try{
-			F_Mascara.setMask(Mascara); //Atribui a mascara
-			F_Mascara.setPlaceholderCharacter(' '); //Caracter para preencimento
-		}
-		catch (Exception excecao) {
-		excecao.printStackTrace();
-		}
-		return F_Mascara;
- 	}
 	public void preencheouEsvazia(boolean preenche) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		for(int i = 0;i<model.getRowCount();i++){
 			model.removeRow(0);
 		}			
-		model.setRowCount(0);	
-		if (preenche) {
-			// Populate the table with the items
-			for (int i = 0;i<itens.size();i++) {
-				model.addRow(new Object[]{itens.get(i).getProduto_cod(),produtos.get(i).getDescricao(),itens.get(i).getQuantidade(),itens.get(i).getSubtotal()});
+		model.setRowCount(0);
+		if(preenche){
+			for (ConsultaPedido cs : pedidosConsultados) {
+				model.addRow(new Object[]{cs.getId(),cs.getCpf(),cs.getData(),cs.getSubTotalf(),cs.getQuanidadeDeItens(),cs.getQuanidadeDeItensdist(),cs.getConcluido()});
 			}
 		}
 	}
-	public int procurapeloid(String id){
-		for(int i = itens.size()-1;i>=0;i--){
-			if(itens.get(i).getProduto_cod().equals(id)){
-				return i;
-			}
+	public void geraDocumento(){
+		String html = "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body><style>*,*:before,*:after{box-sizing: border-box;margin: 0;}body{display: flex;flex-wrap: wrap;}#main{width: 84%;}table {min-width:100%;}th {background-color: gray;}.cn {background-color: aqua;}table,th,td {border: 1px solid black;border-collapse: collapse;}h1 {text-align: center;}p{margin-top:5px;margin-bottom:5px;}#sidebar{width: 16%;background-color: lightblue;height: 50%;box-sizing: border-box;border-right:1px solid black;}</style><div id=\"sidebar\"><h4>Filtros utilizados</h4><strong>data:</strong>"+"<p>min:"+tf_datamin.getText()+"</p><p>max:"+tf_datamax.getText()+"</p><strong>Quantidade de itens</strong><p>min:"+tf_quantMin.getText()+"</p><p>max:"+tf_quantMax.getText()+"</p><strong>Itens distintos</strong><p>min:"+tf_proddismin.getText()+"</p><p>max:"+tf_proddismax.getText()+"</p><strong>Subtotal</strong><p>min:"+tf_subtotalmin.getText()+"</p><p>max:"+tf_subtotalmin.getText()+"</p><strong>CPF:</strong>";
+		for (String string : tf_cpfs.getText().split(",")) {
+			html+="<p>"+string+"</p>";
 		}
-		return -9999;
+		html+="<strong>Produtos</strong><p>";
+		for (String string : tf_cods.getText().split(",")) {
+			html+="<p>"+string+"</p>";
+		}
+		if(rdbtnPeloMenosUm.isSelected()){
+			html+= "<label for='rd'><input name='rd' id='rd' checked type='radio' group='gp'>pelo menos um</label><br><label for='rd1'><input name='rd' id='rd1' type='radio' group='gp'>contem todos</label><br>";
+		}else{
+			html+="<label for='rd'><input name='rd' id='rd'  type='radio' group='gp'>pelo menos um</label><br><label for='rd1'><input name='rd' id='rd1' checked type='radio' group='gp'>contem todos</label><br>";
+		}
+		if(chckbxVendaCompletada.isSelected()){
+			html+="<label for='rd2'><input type='checkbox' checked name='rd2' id='rd2'>Venda completada</label>";
+		}else{
+			html+="<label for='rd2'><input type='checkbox' name='rd2' id='rd2'>Venda completada</label>";
+		}
+		html+="</p></div><div id = 'main'><h1>Relatório de Pedidos</h1><table><thead><tr><th>ID</th><th>CPF</th><th>Dada</th><th>SubTotal</th><th>Qnt. de Itns.</th><th>Qnt. de Prods.</th><th>Concluído</th></tr></thead><tbody>";
+		try {
+			boolean corsin= true;
+			for (ConsultaPedido oop :pedidosConsultados) {
+				if (corsin) {
+					html+= "<tr>";
+					html+=" <td>"+oop.getId()+"</td><td>"+oop.getCpf()+"</td><td>"+oop.getData()+"</td><td>"+oop.getSubTotal()+"</td><td>"+oop.getQuanidadeDeItens()+"</td><td>"+oop.getQuanidadeDeItensdist()+"</td><td>"+oop.getConcluido()+"</td></tr>";
+				
+					corsin=!corsin;
+				}else{
+					html+= "<tr class = 'cn'>";
+					html+=" <td>"+oop.getId()+"</td><td>"+oop.getCpf()+"</td><td>"+oop.getData()+"</td><td>"+oop.getSubTotal()+"</td><td>"+oop.getQuanidadeDeItens()+"</td><td>"+oop.getQuanidadeDeItensdist()+"</td><td>"+oop.getConcluido()+"</td></tr>";
+					corsin=!corsin;
+				}
+			}
+			html+="</tbody></table></div></body></html>";
+			// cria arquivo temporario
+			File arquivo = File.createTempFile("arquivoTemp", ".html");
+			// Cria um FileWriter para o arquivo
+			FileWriter writer = new FileWriter(arquivo);
+			// Escreve a String no arquivo
+			writer.write(html);			
+			// Fecha o FileWriter
+			writer.close();
+			Gerahtml(html);
+			// Cria um novo documento PDF com tamanho de página paisagem
+			PdfWriter pdfWriter = new PdfWriter("Relatorio de Pedidos.pdf");
+			PdfDocument pdfDoc = new PdfDocument(pdfWriter);
+			pdfDoc.setDefaultPageSize(PageSize.A4.rotate());
+			// Converte a string HTML para PDF
+			ConverterProperties props = new ConverterProperties();
+			HtmlConverter.convertToPdf(new FileInputStream(arquivo), pdfDoc, props);			
+		} catch (IOException|ITextException erro_consulta_cliente) {
+				JOptionPane.showMessageDialog(null, erro_consulta_cliente.getMessage());
+		}
 	}
-	public void pedidoNaTela(){
-		tf_idp.setText(pedido.getId());
-		tf_cpf.setText(pedido.getCliente_cpf());
-		String data = pedido.getData(false);
-		String[] dataseparada = data.split(" 00:00:00");
-		data = dataseparada[0]+dataseparada[1];
-		tf_data.setText(data);
+	public void Gerahtml(String html){
+		try {
+            File myFile = new File("nomeDoArquivo.html");
+            if (myFile.createNewFile()) {
+                System.out.println("Arquivo criado: " + myFile.getName());
+            } else {
+                System.out.println("O arquivo já existe.");
+            }
+
+            FileWriter writer = new FileWriter(myFile);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+
+            bufferedWriter.write(html);
+           
+            bufferedWriter.close();
+            System.out.println("Escrito no arquivo com sucesso.");
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro.");
+            e.printStackTrace();
+        }
 	}
 }
+
+
