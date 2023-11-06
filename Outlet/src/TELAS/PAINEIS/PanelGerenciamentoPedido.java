@@ -295,7 +295,7 @@ public class PanelGerenciamentoPedido extends JPanel {
 		});
 		btnInserir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String estado = tf_quantidade.getText();;
+				
 				produto = ProdutoDao.busca(produto.getCod());
 				try {
 					if(!produto.getDescricao().equals("")){					
@@ -323,7 +323,7 @@ public class PanelGerenciamentoPedido extends JPanel {
 					JOptionPane.showMessageDialog(null, "Produto não encontrado");
 				}
 				
-				tf_quantidade.setText(estado);
+				
 			}
 		});
 		btnExcluir.addActionListener(new ActionListener() {
