@@ -80,6 +80,67 @@ public class RelatorioPedidoDAO {
         }
         return pr;
     }
+    public static ArrayList<ConsultaPedido>procuraPedidosAbertos(int pquantmin,int pquantmax,String cpf, String datamin,String datamax,int quantidademin,int quantidademax,double subtotalmin,double subtotalmax,String cods,boolean pelomenosum){
+        ArrayList<ConsultaPedido>pr = new ArrayList<ConsultaPedido>();
+        String query = "SELECT pedido.*, (SELECT SUM(subtotal) FROM itempedido WHERE pedido_id = pedido.id) AS total_compra,(SELECT SUM(quantidade) FROM itempedido WHERE pedido_id = pedido.id) AS quantidade_total,(SELECT COUNT(DISTINCT produto_cod) FROM itempedido WHERE pedido_id = pedido.id) AS produtos_distintos,CASE WHEN EXISTS (SELECT 1 FROM venda WHERE pedido_id = pedido.id) THEN 'Sim' ELSE 'Não' END AS concluido FROM pedido WHERE ";
+        
+        if(!cods.equals("")){
+            if(pelomenosum){
+                cods = "EXISTS (SELECT 1 FROM itempedido WHERE pedido_id = pedido.id AND produto_cod IN ("+cods+"))";
+            }else{
+                cods = "id IN ( SELECT pedido_id FROM itempedido WHERE produto_cod IN ("+cods+") GROUP BY pedido_id HAVING COUNT(DISTINCT produto_cod) = "+cods.split(",").length+")";
+            }
+        }else{
+            cods = "1=1";
+        }
+        if(!cpf.equals("")){
+            cpf = " pedido.cliente_cpf in ("+converteCPF(cpf)+") AND ";
+        }
+        String data= "";
+        if(!datamin.equals("")){
+            System.out.println("não era pa ta chegano aqui");
+            data= " pedido.data >= '"+ converte(datamin)+"' AND ";
+        }else{
+            data+="";
+        }
+        if(!datamax.equals("")){
+            data += "pedido.data <= '"+ converte(datamax)+"' AND ";
+        }{
+            data += "";
+        }
+
+        String conc = "AND concluido = 'Não' ";
+               
+        String quantInd = "";
+        
+        quantInd=" HAVING produtos_distintos >= '"+pquantmin+"'";
+        
+        if (pquantmax!=0){
+            quantInd += "AND produtos_distintos <= '"+pquantmax+"'";
+        }
+
+        String subttl=" AND total_compra >='"+subtotalmin+"' ";
+       
+        if(subtotalmax!=0){
+            subttl+= " AND total_compra <= '"+subtotalmax+"' ";
+        }
+        String totprod = "AND quantidade_total >= '"+quantidademin+"' ";
+        if(quantidademax!=0){
+            totprod += "AND quantidade_total <='"+quantidademax+"'";
+        }
+        query += cpf+data+cods+quantInd+conc+totprod+subttl;
+        try {
+            stmt = con.prepareStatement(query);
+            System.out.println(query);
+            rs = stmt.executeQuery();
+            while(rs.next()){
+                pr.add(new ConsultaPedido(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getInt(6),rs.getString(7)));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao procurar produtos! \n "+e.getMessage());
+        }
+        return pr;
+    }
     public static String converte(String data){
         System.out.println(data);
         String[] aux = data.split("/");
@@ -100,5 +161,5 @@ public class RelatorioPedidoDAO {
             }
         }
         return cpfs;
-    }    
+    }
 }

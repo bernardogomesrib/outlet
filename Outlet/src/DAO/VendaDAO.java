@@ -62,13 +62,12 @@ ENGINE = InnoDB;
      */
         int vl = 0;
         try {
-            String sql = "INSERT INTO venda(numero,data,formapagamento,total,pedido_id) values(?,?,?,?,?)";
+            String sql = "INSERT INTO venda(numero,data,formapagamento,total,pedido_id) values(?,CURRENT_TIMESTAMP,?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setString(1, venda.getNumero());
-            ps.setString(2, venda.getData(true));
-            ps.setString(3, venda.getFormapagamento());
-            ps.setDouble(4, venda.getTotal());
-            ps.setString(5, venda.getPedido_id());
+            ps.setString(1, venda.getNumero());            
+            ps.setString(2, venda.getFormapagamento());
+            ps.setDouble(3, venda.getTotal());
+            ps.setString(4, venda.getPedido_id());
             vl += ps.executeUpdate();
             
         } catch (SQLException e) {
@@ -108,7 +107,6 @@ ENGINE = InnoDB;
     }
     public static Venda busca(String numero){
         Venda venda = new Venda();
-        
         try {
             String sql = "SELECT numero,data,formapagamento,total,pedido_id FROM venda where numero = ?";            
             ps = con.prepareStatement(sql);
@@ -126,5 +124,19 @@ ENGINE = InnoDB;
             JOptionPane.showMessageDialog(null, "Erro ao buscar venda!\n"+ e.getMessage());
         }
         return venda;
+    }
+    public static int proxIdDisponivel(){
+        int id = 1;
+        String query="SELECT numero FROM venda ORDER BY numero DESC LIMIT 1";
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                id+=rs.getInt(1);
+            }
+        } catch (SQLException e) {
+          JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return id;
     }
 }

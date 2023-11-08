@@ -138,6 +138,18 @@ ENGINE = InnoDB; */
         return pedido;
         
     }
-   
-    
+    public static double pegaSubtotalDePedido(String id){
+        double subtotal = 0;
+        String query = "SELECT SUM(subtotal) as sbttl FROM itempedido WHERE pedido_id = '"+id+"'";
+        try {
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                subtotal+= rs.getDouble("sbttl");
+            }
+        } catch (SQLException e) {
+           JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return subtotal;
+    }
 }

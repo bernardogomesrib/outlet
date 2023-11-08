@@ -25,6 +25,13 @@ ENGINE = InnoDB;
     private String formapagamento;
     private double total;
     private String pedido_id;
+    public Venda(){}
+    public Venda(String numero,String formapagamento,double total, String pedido_id){
+        this.setNumero(numero);
+        this.setFormapagamento(formapagamento);
+        this.setTotal(total);
+        this.setPedido_id(pedido_id);
+    }
     public String getNumero() {
         return numero;
     }

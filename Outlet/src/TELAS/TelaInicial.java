@@ -21,6 +21,8 @@ import TELAS.PAINEIS.PanelCliente;
 import TELAS.PAINEIS.PanelGerenciamentoFornecedor;
 import TELAS.PAINEIS.PanelGerenciamentoPedido;
 import TELAS.PAINEIS.PanelGerenciamentoProduto;
+import TELAS.PAINEIS.PanelGerenciamentoVendas;
+import TELAS.PAINEIS.PanelGerenciarFornecimentos;
 import TELAS.PAINEIS.PanelRelatorioPedido;
 import DAO.ClienteComEnderecoDAO;
 import DAO.ClienteDAO;
@@ -46,6 +48,8 @@ public class TelaInicial extends JFrame {
 	PanelGerenciamentoPedido panelGerenciamentoPedido = new PanelGerenciamentoPedido(layeredPane);
 	PanelGerenciamentoFornecedor panelGerenciamentoFornecedor = new PanelGerenciamentoFornecedor(layeredPane);
 	PanelRelatorioPedido panelRelatorioPedido = new PanelRelatorioPedido(layeredPane);
+	PanelGerenciamentoVendas panelGerenciamentoVendas = new PanelGerenciamentoVendas(layeredPane);
+	PanelGerenciarFornecimentos panelGerenciarFornecimentos = new PanelGerenciarFornecimentos(layeredPane);
 	PanelTeste panelTeste = new PanelTeste(layeredPane);
 	/**
 	 * Launch the application.
@@ -137,8 +141,6 @@ public class TelaInicial extends JFrame {
 		});
 		mn_Produto.add(mntm_ProdutoConsulta);
 		
-		JMenu mn_Estoque = new JMenu("Estoque");
-		menuBar.add(mn_Estoque);
 		
 		JMenu mn_Pedido = new JMenu("Pedido");
 		menuBar.add(mn_Pedido);
@@ -167,6 +169,8 @@ public class TelaInicial extends JFrame {
 		JMenuItem mntm_VendaGerenciamento = new JMenuItem("Gerenciamento");
 		mntm_VendaGerenciamento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				panelGerenciamentoVendas.praFrente();
 			}
 		});
 		mn_Venda.add(mntm_VendaGerenciamento);
@@ -174,34 +178,15 @@ public class TelaInicial extends JFrame {
 		JMenuItem mntm_VendaConsulta = new JMenuItem("Consulta");
 		mntm_VendaConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				panelTeste.praFrente();
 			}
 		});
 		mn_Venda.add(mntm_VendaConsulta);
 		
-		JMenu mn_Financeiro = new JMenu("Financeiro");
-		menuBar.add(mn_Financeiro);
-		
-		JMenuItem mntm_ContasPagar = new JMenuItem("Contas a Pagar");
-		mntm_ContasPagar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		mn_Financeiro.add(mntm_ContasPagar);
-		
-		JMenuItem mntm_ContasReceber = new JMenuItem("Contas a Receber");
-		mntm_ContasReceber.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		mn_Financeiro.add(mntm_ContasReceber);
 		
 		JMenu mn_EntradaMercadorias = new JMenu("Fornecedor");
-		/*
-		mn_EntradaMercadorias.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		 */
+		
 		menuBar.add(mn_EntradaMercadorias);
 		
 		JMenuItem mntm_Gerenciar_fornecedores = new JMenuItem("Gerenciar fornecedores");
@@ -217,15 +202,13 @@ public class TelaInicial extends JFrame {
 		mntm_Gerenciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limparpainel();
-				panelTeste.praFrente();
+				panelGerenciarFornecimentos.praFrente();
 			}
 		});
 		mn_EntradaMercadorias.add(mntm_Gerenciar);
 
 
 
-		JMenu mn_Relatorios = new JMenu("Relatórios");
-		menuBar.add(mn_Relatorios);
 		
 		JMenu mn_Nada1 = new JMenu(" ");
 		menuBar.add(mn_Nada1);
@@ -247,10 +230,17 @@ public class TelaInicial extends JFrame {
 		menuBar.add(mn_Nada9);
 		JMenu mn_Nada10 = new JMenu(" ");
 		menuBar.add(mn_Nada10);
+		JMenu mn_Nada11 = new JMenu(" ");
+		menuBar.add(mn_Nada11);
+		JMenu mn_Nada12 = new JMenu(" ");
+		menuBar.add(mn_Nada12);
+		JMenu mn_Nada13 = new JMenu(" ");
+		menuBar.add(mn_Nada13);
 		
 		JMenu mn_Sair = new JMenu("Sair");
 		mn_Sair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		menuBar.add(mn_Sair);
