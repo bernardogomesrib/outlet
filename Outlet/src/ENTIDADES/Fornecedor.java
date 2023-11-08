@@ -30,6 +30,14 @@ ENGINE = InnoDB; */
     private String cidade;
     private String estado;
     private String cep;
+    public Fornecedor(){
+
+    }
+    public Fornecedor(String cnpj,String razaosocial,String estado){
+        this.setCnpj(cnpj);
+        this.setRazaosocial(razaosocial);
+        this.setEstado(estado);
+    }
     public String getCnpj() {
         return cnpj;
     }

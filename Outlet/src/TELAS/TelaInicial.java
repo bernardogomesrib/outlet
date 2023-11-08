@@ -29,6 +29,7 @@ import DAO.FornecedorDAO;
 import DAO.ItempedidoDAO;
 import DAO.PedidoDAO;
 import DAO.ProdutoDao;
+import DAO.ProdutofornecedorDAO;
 import DAO.RelatorioPedidoDAO;
 import DAO.VendaDAO;
 
@@ -45,7 +46,7 @@ public class TelaInicial extends JFrame {
 	PanelGerenciamentoPedido panelGerenciamentoPedido = new PanelGerenciamentoPedido(layeredPane);
 	PanelGerenciamentoFornecedor panelGerenciamentoFornecedor = new PanelGerenciamentoFornecedor(layeredPane);
 	PanelRelatorioPedido panelRelatorioPedido = new PanelRelatorioPedido(layeredPane);
-	//PanelTeste panelTeste = new PanelTeste(layeredPane);
+	PanelTeste panelTeste = new PanelTeste(layeredPane);
 	/**
 	 * Launch the application.
 	 */
@@ -65,6 +66,7 @@ public class TelaInicial extends JFrame {
 					FornecedorDAO.start(con.getConexao());
 					PedidoDAO.start(con.getConexao());
 					RelatorioPedidoDAO.start(con.getConexao());
+					ProdutofornecedorDAO.start(con.getConexao());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -193,7 +195,7 @@ public class TelaInicial extends JFrame {
 		});
 		mn_Financeiro.add(mntm_ContasReceber);
 		
-		JMenu mn_EntradaMercadorias = new JMenu("Entrada de \nMercadoria");
+		JMenu mn_EntradaMercadorias = new JMenu("Fornecedor");
 		/*
 		mn_EntradaMercadorias.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -210,6 +212,15 @@ public class TelaInicial extends JFrame {
 			}
 		});
 		mn_EntradaMercadorias.add(mntm_Gerenciar_fornecedores);
+
+		JMenuItem mntm_Gerenciar = new JMenuItem("Gerenciar fornecimentos");  
+		mntm_Gerenciar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				panelTeste.praFrente();
+			}
+		});
+		mn_EntradaMercadorias.add(mntm_Gerenciar);
 
 
 
@@ -252,9 +263,6 @@ public class TelaInicial extends JFrame {
     /**
      * 
      */
-
-    
-	
 	public void limparpainel() {
 		
         layeredPane.removeAll();

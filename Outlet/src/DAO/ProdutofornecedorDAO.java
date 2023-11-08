@@ -54,7 +54,7 @@ ENGINE = InnoDB;
     public static int deleta(Produtofornecedor produtofornecedor){
         int vl = 0;
         try {
-            String sql = "DELETE FROM produtofornecededor WHERE produto_cod = ? and fornecedor_cnpj = ?";
+            String sql = "DELETE FROM produtofornecedor WHERE produto_cod = ? and fornecedor_cnpj = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1,produtofornecedor.getProduto_cod());
             ps.setString(2, produtofornecedor.getFornecedor_cnpj());            

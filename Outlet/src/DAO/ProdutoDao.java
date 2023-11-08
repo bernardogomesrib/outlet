@@ -103,7 +103,7 @@ public class ProdutoDao {
         ArrayList<Produto>pr = new ArrayList<Produto>();
         String query = "SELECT * FROM produto WHERE";
         if (!cod.equals("")) {
-            cod =" cod = "+cod+" AND ";
+            cod =" cod in("+cod+") AND ";
         }
         if(!descricao.equals("")){
             if(descricaoExata){

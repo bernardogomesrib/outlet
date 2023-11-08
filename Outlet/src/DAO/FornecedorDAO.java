@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -121,5 +122,34 @@ ENGINE = InnoDB; */
         }
         return end;
         
+    }
+    public static ArrayList<Fornecedor>buscaFornecedor(String cnpj,String nome){
+        String sql = "select cnpj,razaosocial,email,telefone,logradouro,numero,complemento,bairro,cidade,estado,cep from fornecedor ";        
+        ArrayList<Fornecedor>fr = new ArrayList<Fornecedor>();
+        if(nome.equals("")){
+            if(cnpj.equals("")){
+
+            }else{
+                nome = "where cnpj = '"+cnpj+"'";
+                cnpj = "";
+            }
+        }else{
+            nome = "where razaosocial like '%"+nome+"%'";
+        }
+        if(!cnpj.equals("")){
+            cnpj = " AND cnpj = '"+cnpj+"';";
+        }
+        sql+=nome+cnpj;
+        System.out.println(sql);
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                fr.add(new Fornecedor(rs.getString("cnpj"),rs.getString("razaosocial"),rs.getString("estado")));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,e.getMessage());
+        }
+        return fr;
     }
 }
