@@ -17,6 +17,7 @@ import javax.swing.BoxLayout;
 import DATABASE.Conexao;
 import TELAS.PAINEIS.ConsultaCliente;
 import TELAS.PAINEIS.ConsultaProduto;
+import TELAS.PAINEIS.ConsultaVendas;
 import TELAS.PAINEIS.PanelCliente;
 import TELAS.PAINEIS.PanelGerenciamentoFornecedor;
 import TELAS.PAINEIS.PanelGerenciamentoPedido;
@@ -51,6 +52,7 @@ public class TelaInicial extends JFrame {
 	PanelGerenciamentoVendas panelGerenciamentoVendas = new PanelGerenciamentoVendas(layeredPane);
 	PanelGerenciarFornecimentos panelGerenciarFornecimentos = new PanelGerenciarFornecimentos(layeredPane);
 	PanelTeste panelTeste = new PanelTeste(layeredPane);
+	ConsultaVendas consultaVendas = new ConsultaVendas(layeredPane);
 	/**
 	 * Launch the application.
 	 */
@@ -179,7 +181,7 @@ public class TelaInicial extends JFrame {
 		mntm_VendaConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limparpainel();
-				panelTeste.praFrente();
+				consultaVendas.praFrente();
 			}
 		});
 		mn_Venda.add(mntm_VendaConsulta);
@@ -206,6 +208,15 @@ public class TelaInicial extends JFrame {
 			}
 		});
 		mn_EntradaMercadorias.add(mntm_Gerenciar);
+
+		JMenuItem mntm_ConsultarFornecimentos = new JMenuItem("Consultar fornecimentos");  
+		mntm_ConsultarFornecimentos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				panelTeste.praFrente();
+			}
+		});
+		mn_EntradaMercadorias.add(mntm_ConsultarFornecimentos);
 
 
 

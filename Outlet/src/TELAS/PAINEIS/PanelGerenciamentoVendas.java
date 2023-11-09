@@ -111,7 +111,8 @@ public class PanelGerenciamentoVendas extends JPanel {
 					}
 					
 					lblValorDoPedido.setText("Valor do pedido : R$ "+df.format(subtotal));
-					lblValorDesconto.setText("Valor pós desconto: R$ "+df.format(((1-(desconto/100))*subtotal)));
+					desconto = ((1-(desconto/100))*subtotal);
+					lblValorDesconto.setText("Valor pós desconto: R$ "+df.format(desconto));
 				}
 			}
 		});
@@ -140,7 +141,8 @@ public class PanelGerenciamentoVendas extends JPanel {
 							System.out.println(zz.getMessage());
 					}
 					lblValorDoPedido.setText("Valor do pedido : R$ "+df.format(subtotal));
-					lblValorDesconto.setText("Valor pós desconto: R$ "+df.format(((1-(desconto/100))*subtotal)));
+					desconto = ((1-(desconto/100))*subtotal);
+					lblValorDesconto.setText("Valor pós desconto: R$ "+df.format(desconto));
 				}
 			}
 		});

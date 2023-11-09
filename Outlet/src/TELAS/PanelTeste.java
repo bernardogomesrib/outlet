@@ -5,24 +5,27 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import ENTIDADES.Fornecedor;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class PanelTeste extends JPanel {
-	private JLayeredPane layeredPane;
-	Fornecedor fornecedor = new Fornecedor();
-	
+	private JLayeredPane layeredPane;	
 	private JTextField textField;
+	private JTextField tf_cnpjs;
+	private JTextField tf_nomeFornecedor;
+	private JTextField tf_telefonefornecedor;
 	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
+	private JTextField tf_cods;
+	private JTextField tf_nomes;
+	private JTextField tf_marcas;
+	private JTextField tf_estoquemin;
+	private JTextField tf_estoquemax;
+	private JTextField tf_estados;
+	private JTextField tf_cidades;
 	
 	
 	/**
@@ -39,112 +42,172 @@ public class PanelTeste extends JPanel {
 		setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 12, 301, 99);
+		panel.setBounds(12, 12, 243, 99);
 		add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblIdVenda = new JLabel("ids Venda:");
-		lblIdVenda.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblIdVenda.setBounds(12, 12, 124, 15);
-		panel.add(lblIdVenda);
+		JLabel CNPJs = new JLabel("CNPJs");
+		CNPJs.setHorizontalAlignment(SwingConstants.RIGHT);
+		CNPJs.setBounds(12, 26, 75, 15);
+		panel.add(CNPJs);
 		
 		textField = new JTextField();
 		textField.setBounds(162, 10, -67, 15);
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(162, 10, 128, 19);
-		panel.add(textField_1);
-		textField_1.setColumns(10);
+		tf_cnpjs = new JTextField();
+		tf_cnpjs.setBounds(105, 24, 128, 19);
+		panel.add(tf_cnpjs);
+		tf_cnpjs.setColumns(10);
 		
-		JLabel lblCpfs = new JLabel("CPFs:");
-		lblCpfs.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCpfs.setBounds(12, 39, 124, 15);
-		panel.add(lblCpfs);
-		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(162, 39, 128, 19);
-		panel.add(textField_4);
-		
-		JLabel lblFormasPg = new JLabel("Formas PGMT");
+		JLabel lblFormasPg = new JLabel("Nome");
 		lblFormasPg.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblFormasPg.setBounds(12, 66, 124, 15);
+		lblFormasPg.setBounds(12, 46, 75, 15);
 		panel.add(lblFormasPg);
 		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(162, 66, 128, 19);
-		panel.add(textField_5);
+		tf_nomeFornecedor = new JTextField();
+		tf_nomeFornecedor.setColumns(10);
+		tf_nomeFornecedor.setBounds(105, 46, 128, 19);
+		panel.add(tf_nomeFornecedor);
+		
+		JLabel lblNumeroTel = new JLabel("Telefone");
+		lblNumeroTel.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNumeroTel.setBounds(12, 68, 75, 15);
+		panel.add(lblNumeroTel);
+		
+		tf_telefonefornecedor = new JTextField();
+		tf_telefonefornecedor.setColumns(10);
+		tf_telefonefornecedor.setBounds(105, 68, 128, 19);
+		panel.add(tf_telefonefornecedor);
+		
+		JLabel lblFornecedor = new JLabel("Fornecedor");
+		lblFornecedor.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFornecedor.setBounds(12, 2, 221, 15);
+		panel.add(lblFornecedor);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 123, 886, 513);
-		add(scrollPane);			
+		add(scrollPane);
+		
+		JButton btnSalvarRelatorio = new JButton("Salvar relatório");
+		btnSalvarRelatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnSalvarRelatorio.setBounds(742, 648, 156, 25);
+		add(btnSalvarRelatorio);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(325, 12, 208, 99);
-		add(panel_1);
 		panel_1.setLayout(null);
+		panel_1.setBounds(467, 12, 237, 99);
+		add(panel_1);
 		
-		JLabel lblDataDaVenda = new JLabel("Data da venda");
-		lblDataDaVenda.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDataDaVenda.setBounds(12, 12, 184, 15);
-		panel_1.add(lblDataDaVenda);
+		JLabel lblCods = new JLabel("CODs");
+		lblCods.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCods.setBounds(12, 24, 70, 15);
+		panel_1.add(lblCods);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(83, 37, 114, 19);
-		panel_1.add(textField_2);
-		textField_2.setColumns(10);
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(162, 10, -67, 15);
+		panel_1.add(textField_1);
+		
+		tf_cods = new JTextField();
+		tf_cods.setColumns(10);
+		tf_cods.setBounds(100, 24, 128, 19);
+		panel_1.add(tf_cods);
+		
+		JLabel lblNomeProd = new JLabel("Nomes");
+		lblNomeProd.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNomeProd.setBounds(12, 46, 70, 15);
+		panel_1.add(lblNomeProd);
+		
+		tf_nomes = new JTextField();
+		tf_nomes.setColumns(10);
+		tf_nomes.setBounds(100, 46, 128, 19);
+		panel_1.add(tf_nomes);
+		
+		JLabel lblMarcaProd = new JLabel("Marcas");
+		lblMarcaProd.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblMarcaProd.setBounds(12, 68, 70, 15);
+		panel_1.add(lblMarcaProd);
+		
+		tf_marcas = new JTextField();
+		tf_marcas.setColumns(10);
+		tf_marcas.setBounds(100, 68, 128, 19);
+		panel_1.add(tf_marcas);
+		
+		JLabel lblProduto = new JLabel("Produto");
+		lblProduto.setHorizontalAlignment(SwingConstants.CENTER);
+		lblProduto.setBounds(12, 2, 251, 15);
+		panel_1.add(lblProduto);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(716, 12, 182, 99);
+		add(panel_2);
+		panel_2.setLayout(null);
+		
+		JLabel lblEstoque = new JLabel("Qnt. Estoque");
+		lblEstoque.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEstoque.setBounds(12, 2, 158, 15);
+		panel_2.add(lblEstoque);
+		
+		tf_estoquemin = new JTextField();
+		tf_estoquemin.setBounds(54, 29, 116, 19);
+		panel_2.add(tf_estoquemin);
+		tf_estoquemin.setColumns(10);
 		
 		JLabel lblMin = new JLabel("Min:");
-		lblMin.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblMin.setBounds(12, 39, 55, 15);
-		panel_1.add(lblMin);
-		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(83, 68, 114, 19);
-		panel_1.add(textField_3);
+		lblMin.setBounds(12, 29, 39, 15);
+		panel_2.add(lblMin);
 		
 		JLabel lblMax = new JLabel("Max:");
-		lblMax.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblMax.setBounds(12, 70, 55, 15);
-		panel_1.add(lblMax);
+		lblMax.setBounds(11, 60, 39, 15);
+		panel_2.add(lblMax);
 		
-		JPanel panel_1_1 = new JPanel();
-		panel_1_1.setLayout(null);
-		panel_1_1.setBounds(545, 12, 208, 99);
-		add(panel_1_1);
-		
-		JLabel lblSubtotal = new JLabel("Total");
-		lblSubtotal.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSubtotal.setBounds(12, 12, 184, 15);
-		panel_1_1.add(lblSubtotal);
-		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(83, 37, 114, 19);
-		panel_1_1.add(textField_6);
-		
-		JLabel lblMin_1 = new JLabel("Min:");
-		lblMin_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblMin_1.setBounds(12, 39, 55, 15);
-		panel_1_1.add(lblMin_1);
-		
-		textField_7 = new JTextField();
-		textField_7.setColumns(10);
-		textField_7.setBounds(83, 68, 114, 19);
-		panel_1_1.add(textField_7);
-		
-		JLabel lblMax_1 = new JLabel("Max:");
-		lblMax_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblMax_1.setBounds(12, 70, 55, 15);
-		panel_1_1.add(lblMax_1);
+		tf_estoquemax = new JTextField();
+		tf_estoquemax.setColumns(10);
+		tf_estoquemax.setBounds(53, 60, 117, 19);
+		panel_2.add(tf_estoquemax);
 		
 		JButton btnPesquisar = new JButton("Pesquisar");
-		btnPesquisar.setBounds(765, 12, 133, 99);
+		btnPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnPesquisar.setBounds(613, 648, 117, 25);
 		add(btnPesquisar);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(267, 12, 188, 99);
+		add(panel_3);
+		panel_3.setLayout(null);
+		
+		JLabel lblLocal = new JLabel("Local");
+		lblLocal.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLocal.setBounds(12, 2, 164, 15);
+		panel_3.add(lblLocal);
+		
+		tf_estados = new JTextField();
+		tf_estados.setBounds(80, 29, 96, 19);
+		panel_3.add(tf_estados);
+		tf_estados.setColumns(10);
+		
+		JLabel lblEstados = new JLabel("Estados");
+		lblEstados.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblEstados.setBounds(12, 29, 62, 15);
+		panel_3.add(lblEstados);
+		
+		tf_cidades = new JTextField();
+		tf_cidades.setColumns(10);
+		tf_cidades.setBounds(80, 60, 96, 19);
+		panel_3.add(tf_cidades);
+		
+		JLabel lblCidades = new JLabel("Cidades");
+		lblCidades.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCidades.setBounds(12, 60, 62, 15);
+		panel_3.add(lblCidades);
     }	
 }
 

@@ -29,7 +29,7 @@ ENGINE = InnoDB; */
             String dt ="";
             try {
                 System.out.println(data);
-                dt = data.substring(6, 10)+"-"+data.substring(3, 5)+"-"+data.substring(0, 2)+" "+data.substring(13,data.length()-1);    
+                dt = data.substring(6, 10)+"-"+data.substring(3, 5)+"-"+data.substring(0, 2)+" "+data.substring(13,data.length());    
             } catch (Exception e) {
                 System.out.println("exeption no pedido.getdata(invertido:true)");
                 System.out.println(dt);               

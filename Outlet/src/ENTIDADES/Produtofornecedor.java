@@ -22,6 +22,27 @@ ENGINE = InnoDB;
     */
     private String produto_cod;
     private String fornecedor_cnpj;
+    private Produto produto;
+    private Fornecedor fornecedor;
+    public Produto getProduto() {
+        return produto;
+    }
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+    }
+    public Produtofornecedor(){}
+    public Produtofornecedor(Produto produto,Fornecedor fornecedor){
+        this.setFornecedor(fornecedor);
+        this.setProduto(produto);
+        this.setFornecedor_cnpj(this.getFornecedor().getCnpj());
+        this.setProduto_cod(this.produto.getCod());
+    }
     public String getProduto_cod() {
         return produto_cod;
     }

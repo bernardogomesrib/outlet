@@ -38,6 +38,19 @@ ENGINE = InnoDB; */
         this.setRazaosocial(razaosocial);
         this.setEstado(estado);
     }
+    public Fornecedor(String cnpj,String razaosocial,String email,String telefone,String logradouro,String numero,String complemento,String bairro,String cidade,String estado,String cep){
+        this.setCnpj(cnpj);
+        this.setRazaosocial(razaosocial);
+        this.setEstado(estado);
+        this.setBairro(bairro);
+        this.setCep(cep);
+        this.setCidade(cidade);
+        this.setTelefone(telefone);
+        this.setNumero(numero);
+        this.setLogradouro(logradouro);
+        this.setEmail(email);
+        this.setComplemento(complemento);
+    }
     public String getCnpj() {
         return cnpj;
     }
