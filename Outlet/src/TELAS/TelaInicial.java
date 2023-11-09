@@ -24,6 +24,7 @@ import TELAS.PAINEIS.PanelGerenciamentoPedido;
 import TELAS.PAINEIS.PanelGerenciamentoProduto;
 import TELAS.PAINEIS.PanelGerenciamentoVendas;
 import TELAS.PAINEIS.PanelGerenciarFornecimentos;
+import TELAS.PAINEIS.PanelRelatorioFornecimentos;
 import TELAS.PAINEIS.PanelRelatorioPedido;
 import DAO.ClienteComEnderecoDAO;
 import DAO.ClienteDAO;
@@ -51,7 +52,8 @@ public class TelaInicial extends JFrame {
 	PanelRelatorioPedido panelRelatorioPedido = new PanelRelatorioPedido(layeredPane);
 	PanelGerenciamentoVendas panelGerenciamentoVendas = new PanelGerenciamentoVendas(layeredPane);
 	PanelGerenciarFornecimentos panelGerenciarFornecimentos = new PanelGerenciarFornecimentos(layeredPane);
-	PanelTeste panelTeste = new PanelTeste(layeredPane);
+	PanelRelatorioFornecimentos panelRelatorioFornecimentos = new PanelRelatorioFornecimentos(layeredPane);
+	//PanelTeste panelTeste = new PanelTeste(layeredPane);
 	ConsultaVendas consultaVendas = new ConsultaVendas(layeredPane);
 	/**
 	 * Launch the application.
@@ -213,7 +215,7 @@ public class TelaInicial extends JFrame {
 		mntm_ConsultarFornecimentos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limparpainel();
-				panelTeste.praFrente();
+				panelRelatorioFornecimentos.praFrente();
 			}
 		});
 		mn_EntradaMercadorias.add(mntm_ConsultarFornecimentos);

@@ -24,6 +24,21 @@ ENGINE = InnoDB;
     private String fornecedor_cnpj;
     private Produto produto;
     private Fornecedor fornecedor;
+    public String getProdutoNome(){
+        return this.produto.getDescricao();
+    }
+    public int getProdutoEstoque(){
+        return this.produto.getQuantidadeestoque();
+    }
+    public String getFornecedorCidade(){
+        return this.fornecedor.getCidade();
+    }
+    public String getFornecedorEstado(){
+        return this.fornecedor.getEstado();
+    }
+    public String getFornecedorNome(){
+        return this.getFornecedor().getRazaosocial();
+    }
     public Produto getProduto() {
         return produto;
     }

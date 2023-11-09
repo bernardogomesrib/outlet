@@ -1,4 +1,4 @@
-package TELAS;
+package TELAS.PAINEIS;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 
-public class PanelTeste extends JPanel {
+public class PanelRelatorioFornecimentos extends JPanel {
 	private JLayeredPane layeredPane;	
 	private JTextField textField;
 	private JTextField tf_cnpjs;
@@ -44,7 +44,7 @@ public class PanelTeste extends JPanel {
 		layeredPane.add(this);
 		layeredPane.moveToFront(this);
 	}
-    public PanelTeste(JLayeredPane layeredPane) {
+    public PanelRelatorioFornecimentos(JLayeredPane layeredPane) {
 		this.layeredPane = layeredPane;
 		setBounds(0, 0, 910, 686);		
 		setBackground(new Color(255, 255, 255));

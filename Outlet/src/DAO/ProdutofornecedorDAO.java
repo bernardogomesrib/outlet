@@ -142,7 +142,7 @@ ENGINE = InnoDB;
             cidades = likeXorY(cidades, "fornecedor.cidade")+" AND ";
         }
         if(!cods.equals("")){
-            cods = "AND produto.cod IN("+converteCNPJ(cods)+")"+" AND ";
+            cods = " produto.cod IN("+converteCNPJ(cods)+")"+" AND ";
         }
         if(!nomesprod.equals("")){
             nomesprod = likeXorY(nomesprod,"produto.descricao")+" AND ";

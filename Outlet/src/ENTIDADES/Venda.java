@@ -25,12 +25,27 @@ ENGINE = InnoDB;
     private String formapagamento;
     private double total;
     private String pedido_id;
+    private String cliente_cpf;
+    public String getCliente_cpf() {
+        return cliente_cpf;
+    }
+    public void setCliente_cpf(String cliente_cpf) {
+        this.cliente_cpf = cliente_cpf;
+    }
     public Venda(){}
     public Venda(String numero,String formapagamento,double total, String pedido_id){
         this.setNumero(numero);
         this.setFormapagamento(formapagamento);
         this.setTotal(total);
         this.setPedido_id(pedido_id);
+    }
+    public Venda(String numero,String cliente_cpf,String formapagamento,String data,double total){        
+        this.setNumero(numero);
+        this.setFormapagamento(formapagamento);
+        this.setTotal(total);
+        this.setPedido_id(pedido_id);
+        this.setData(data, true);
+        this.setCliente_cpf(cliente_cpf);
     }
     public String getNumero() {
         return numero;
@@ -39,19 +54,26 @@ ENGINE = InnoDB;
         this.numero = numero;
     }
     public String getData(boolean invertido) {
-        if(invertido){
-            
-            String[] dividido = this.data.split("/");
-            String dt = dividido[2]+"-"+dividido[1]+"-"+dividido[0];            
+        if(invertido){            
+        
+            String dt ="";
+            try {
+                System.out.println(data);
+                dt = data.substring(6, 10)+"-"+data.substring(3, 5)+"-"+data.substring(0, 2)+" "+data.substring(13,data.length());    
+            } catch (Exception e) {
+                System.out.println("exeption no pedido.getdata(invertido:true)");
+                System.out.println(dt);               
+            }            
+            System.out.println(dt);
             return dt;
         }else{
+            System.out.println(data);
             return data;
         }
     }
     public void setData(String data,boolean invertido) {
-        if(invertido){
-            String[] dividido = data.split("-");
-            this.data = dividido[2]+"/"+dividido[1]+"/"+dividido[0];            
+        if(invertido){            
+            this.data = data.substring(8,10)+"/"+data.substring(5,7)+"/"+data.substring(0,4)+" as"+data.substring(10, data.length());
         }else{
             this.data = data;
         }

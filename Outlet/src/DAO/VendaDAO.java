@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -138,5 +139,65 @@ ENGINE = InnoDB;
           JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return id;
+    }
+    public static ArrayList<Venda> relatorioVenda(String ids,String cpfs,String formaspgmnt,String datamin,String datamax,double totalmin,double totalmax){
+        ArrayList<Venda> vn = new ArrayList<Venda>();
+        String sql = "SELECT venda.numero, pedido.cliente_cpf, venda.formapagamento, venda.data, venda.total FROM venda JOIN pedido ON venda.pedido_id = pedido.id WHERE";
+        if(!ids.equals("")){
+            ids = "numero IN ("+ids+") AND ";
+        }
+        if(!cpfs.equals("")){
+            cpfs = "pedido.cliente_cpf IN("+converteCPF(cpfs)+") AND ";
+        }
+        if(!formaspgmnt.equals("")){
+            formaspgmnt = likeXorY(formaspgmnt, "venda.formapagamento");
+        }
+        if(!datamin.equals("")){
+            datamin = "venda.data >="+datamin+" AND ";
+        }
+        
+        if(!datamax.equals("")){
+            datamin+= "venda.data <="+datamax+" AND ";
+        }
+        String total = "venda.total >= "+totalmin;
+        if(totalmax>0){
+            total+= " AND venda.total <= "+totalmax;
+        }
+        sql += ids+cpfs+formaspgmnt+datamin+total;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                vn.add(new Venda(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getDouble(5)));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,e.getMessage());
+        }
+        return vn;
+    }
+    private static String converteCPF(String cpfs){
+        String[] aux = cpfs.split(",");
+        cpfs = "";
+        for (int i = 0; i<aux.length;i++) {
+            if(i==aux.length-1){
+                cpfs+="'"+aux[i]+"'";
+            }else{
+                cpfs+="'"+aux[i]+"', ";
+            }
+        }
+        return cpfs;
+    }
+    public static String likeXorY(String names,String tablenamedotcolumn){
+        String[]aux = names.split(",");
+        int tamanho = aux.length;
+        names = "";
+        for(int i = 0;i<tamanho;i++){
+            if(i==tamanho-1){
+                names+=tablenamedotcolumn+" LIKE '"+ aux[i]+"' ";
+            }else{
+                names+=tablenamedotcolumn+" LIKE '"+ aux[i]+"' OR ";
+            }
+        }
+        return names;
     }
 }
