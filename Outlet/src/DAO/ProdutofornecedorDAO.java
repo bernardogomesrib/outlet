@@ -123,7 +123,7 @@ ENGINE = InnoDB;
         }
         return ls.subList(0, ls.size());
     }
-    public ArrayList<Produtofornecedor>pesquisaRelatorio(String cnpjs,String nomesfornecedor,String telefones,String estados,String cidades,String cods,String nomesprod,String marcas,int quantmin,int quantmax){
+    public static ArrayList<Produtofornecedor>pesquisaRelatorio(String cnpjs,String nomesfornecedor,String telefones,String estados,String cidades,String cods,String nomesprod,String marcas,int quantmin,int quantmax){
         ArrayList<Produtofornecedor> pr = new ArrayList<Produtofornecedor>();
         String sql = "SELECT fornecedor.*, produto.* FROM produtofornecedor JOIN produto ON produto_cod = cod JOIN fornecedor ON fornecedor_cnpj = cnpj WHERE ";
         if(!cnpjs.equals("")){
@@ -167,7 +167,7 @@ ENGINE = InnoDB;
         }
         return pr;
     }
-    public String converteCNPJ(String cnpjs){
+    public static String converteCNPJ(String cnpjs){
         String[] aux = cnpjs.split(",");
         cnpjs = "";
         for (int i = 0;i<aux.length;i++) {
@@ -179,7 +179,7 @@ ENGINE = InnoDB;
         }
         return cnpjs;
     }
-    public String likeXorY(String names,String tablenamedotcolumn){
+    public static String likeXorY(String names,String tablenamedotcolumn){
         String[]aux = names.split(",");
         int tamanho = aux.length;
         names = "";

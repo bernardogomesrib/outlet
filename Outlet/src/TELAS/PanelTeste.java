@@ -6,9 +6,16 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import DAO.ProdutofornecedorDAO;
+import ENTIDADES.Produtofornecedor;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 
@@ -26,7 +33,8 @@ public class PanelTeste extends JPanel {
 	private JTextField tf_estoquemax;
 	private JTextField tf_estados;
 	private JTextField tf_cidades;
-	
+	private JTable table;
+	private ArrayList<Produtofornecedor> produtosComFornecedores = new ArrayList<Produtofornecedor>();
 	
 	/**
 	 * Create the panel.
@@ -71,7 +79,7 @@ public class PanelTeste extends JPanel {
 		tf_nomeFornecedor.setBounds(105, 46, 128, 19);
 		panel.add(tf_nomeFornecedor);
 		
-		JLabel lblNumeroTel = new JLabel("Telefone");
+		JLabel lblNumeroTel = new JLabel("Telefones");
 		lblNumeroTel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNumeroTel.setBounds(12, 68, 75, 15);
 		panel.add(lblNumeroTel);
@@ -85,8 +93,10 @@ public class PanelTeste extends JPanel {
 		lblFornecedor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFornecedor.setBounds(12, 2, 221, 15);
 		panel.add(lblFornecedor);
-		
-		JScrollPane scrollPane = new JScrollPane();
+		table = new JTable();
+		table.setBounds(0,0,886,513);
+		defineTabela();
+		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(12, 123, 886, 513);
 		add(scrollPane);
 		
@@ -174,6 +184,7 @@ public class PanelTeste extends JPanel {
 		JButton btnPesquisar = new JButton("Pesquisar");
 		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				produtosComFornecedores = ProdutofornecedorDAO.pesquisaRelatorio(tf_cnpjs.getText(), tf_nomeFornecedor.getText(), tf_telefonefornecedor.getText(), tf_estados.getText(), tf_cidades.getText(), tf_cods.getText(), TOOL_TIP_TEXT_KEY, TOOL_TIP_TEXT_KEY, ALLBITS, ABORT);
 			}
 		});
 		btnPesquisar.setBounds(613, 648, 117, 25);
@@ -208,7 +219,20 @@ public class PanelTeste extends JPanel {
 		lblCidades.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblCidades.setBounds(12, 60, 62, 15);
 		panel_3.add(lblCidades);
-    }	
+    }
+	public void defineTabela(){
+		DefaultTableModel model = (DefaultTableModel) table.getModel();					//
+		model.addColumn("COD");																// adiciona a coluna 0
+		model.addColumn("Descrição");																// adiciona a coluna 1
+		model.addColumn("Marca");														// adiciona a coluna 2
+		model.addColumn("Preço");															// adiciona a coluna 3
+		model.addColumn("Qnt");															// adiciona a coluna 4
+		table.getColumnModel().getColumn(0).setPreferredWidth(80);			// define a largura da coluna 0
+		table.getColumnModel().getColumn(1).setPreferredWidth(180);			// define a largura da coluna 1
+		table.getColumnModel().getColumn(2).setPreferredWidth(150);			// define a largura da coluna 2
+		table.getColumnModel().getColumn(3).setPreferredWidth(80);			// define a largura da coluna 3
+		table.getColumnModel().getColumn(4).setPreferredWidth(80);			// define a largura da coluna 4
+	}
 }
 
 
