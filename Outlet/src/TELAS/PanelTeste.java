@@ -185,6 +185,8 @@ public class PanelTeste extends JPanel {
 		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				produtosComFornecedores = ProdutofornecedorDAO.pesquisaRelatorio(tf_cnpjs.getText(), tf_nomeFornecedor.getText(), tf_telefonefornecedor.getText(), tf_estados.getText(), tf_cidades.getText(), tf_cods.getText(), TOOL_TIP_TEXT_KEY, TOOL_TIP_TEXT_KEY, ALLBITS, ABORT);
+				//TODO ainda falta terminar isso aqui
+				
 			}
 		});
 		btnPesquisar.setBounds(613, 648, 117, 25);
