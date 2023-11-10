@@ -53,7 +53,7 @@ public class TelaInicial extends JFrame {
 	PanelGerenciamentoVendas panelGerenciamentoVendas = new PanelGerenciamentoVendas(layeredPane);
 	PanelGerenciarFornecimentos panelGerenciarFornecimentos = new PanelGerenciarFornecimentos(layeredPane);
 	PanelRelatorioFornecimentos panelRelatorioFornecimentos = new PanelRelatorioFornecimentos(layeredPane);
-	//PanelTeste panelTeste = new PanelTeste(layeredPane);
+	PanelTeste panelTeste = new PanelTeste(layeredPane);
 	ConsultaVendas consultaVendas = new ConsultaVendas(layeredPane);
 	/**
 	 * Launch the application.
@@ -219,7 +219,14 @@ public class TelaInicial extends JFrame {
 			}
 		});
 		mn_EntradaMercadorias.add(mntm_ConsultarFornecimentos);
-
+		JMenuItem mntm_ConsultarFornedores = new JMenuItem("Consultar fornecedores");  
+		mntm_ConsultarFornedores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limparpainel();
+				panelTeste.praFrente();
+			}
+		});
+		mn_EntradaMercadorias.add(mntm_ConsultarFornedores);
 
 
 		

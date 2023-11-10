@@ -1,270 +1,249 @@
 package TELAS;
 
+
+import ENTIDADES.Fornecedor;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
+
 import javax.swing.JPanel;
+
 import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
+
+import javax.swing.table.DefaultTableModel;
+
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
-
-import DAO.ProdutofornecedorDAO;
-import ENTIDADES.Produtofornecedor;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
 
 
 public class PanelTeste extends JPanel {
-	private JLayeredPane layeredPane;	
-	private JTextField textField;
-	private JTextField tf_cnpjs;
-	private JTextField tf_nomeFornecedor;
-	private JTextField tf_telefonefornecedor;
-	private JTextField textField_1;
-	private JTextField tf_cods;
-	private JTextField tf_nomes;
-	private JTextField tf_marcas;
-	private JTextField tf_estoquemin;
-	private JTextField tf_estoquemax;
-	private JTextField tf_estados;
-	private JTextField tf_cidades;
+		
+	private JLayeredPane layeredPane;
+	private JTextField tf_Cnpj;
+	private JTextField tf_Razaosocial;
+	private JTextField tf_Telefone;
+	private JTextField tf_Logradouro;
+	private JTextField tf_Numero;
+	private JTextField tf_Complemento;
+	private JTextField tf_Cidade;
+	private JTextField tf_Estado;
+	private JTextField tf_Bairro;
+	private JTextField tf_Cep;
 	private JTable table;
-	private ArrayList<Produtofornecedor> produtosComFornecedores = new ArrayList<Produtofornecedor>();
-	
+	private ArrayList<Fornecedor> Fornecedores = new ArrayList<Fornecedor>();
 	/**
 	 * Create the panel.
 	 */
 	public void praFrente(){
 		layeredPane.add(this);
 		layeredPane.moveToFront(this);
+		
 	}
-    public PanelTeste(JLayeredPane layeredPane) {
-		this.layeredPane = layeredPane;
-		setBounds(0, 0, 910, 686);		
-		setBackground(new Color(255, 255, 255));
-		setLayout(null);
+	
+	public PanelTeste(JLayeredPane layeredPane) {
+			this.layeredPane = layeredPane;			
+
+			setBounds(0, 0, 910, 686);		
+			setBackground(new Color(255, 255, 255));
+			setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(12, 12, 243, 99);
-		add(panel);
-		panel.setLayout(null);
+		JPanel panel_indetificar = new JPanel();
+		panel_indetificar.setBackground(new Color(238, 238, 238));
+		panel_indetificar.setBounds(10, 11, 266, 124);
+		add(panel_indetificar);
+		panel_indetificar.setLayout(null);
 		
-		JLabel CNPJs = new JLabel("CNPJs");
-		CNPJs.setHorizontalAlignment(SwingConstants.RIGHT);
-		CNPJs.setBounds(12, 26, 75, 15);
-		panel.add(CNPJs);
+		JLabel lblNewLabel_2 = new JLabel("Razão social:");
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel_2.setBounds(10, 44, 94, 14);
+		panel_indetificar.add(lblNewLabel_2);
 		
-		textField = new JTextField();
-		textField.setBounds(162, 10, -67, 15);
-		panel.add(textField);
-		textField.setColumns(10);
+		tf_Razaosocial = new JTextField();
+		tf_Razaosocial.setBounds(108, 41, 148, 20);
+		panel_indetificar.add(tf_Razaosocial);
+		tf_Razaosocial.setColumns(10);
 		
-		tf_cnpjs = new JTextField();
-		tf_cnpjs.setBounds(105, 24, 128, 19);
-		panel.add(tf_cnpjs);
-		tf_cnpjs.setColumns(10);
+		tf_Cnpj = new JTextField();
+		tf_Cnpj.setBounds(108, 12, 148, 20);
+		panel_indetificar.add(tf_Cnpj);
+		tf_Cnpj.setColumns(10);
 		
-		JLabel lblFormasPg = new JLabel("Nome");
-		lblFormasPg.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblFormasPg.setBounds(12, 46, 75, 15);
-		panel.add(lblFormasPg);
+		JLabel lblCnpj = new JLabel("CNPJ:");
+		lblCnpj.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCnpj.setBounds(10, 14, 94, 14);
+		panel_indetificar.add(lblCnpj);
 		
-		tf_nomeFornecedor = new JTextField();
-		tf_nomeFornecedor.setColumns(10);
-		tf_nomeFornecedor.setBounds(105, 46, 128, 19);
-		panel.add(tf_nomeFornecedor);
+		JLabel lblTelefone = new JLabel("Telefones:");
+		lblTelefone.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTelefone.setBounds(10, 75, 94, 14);
+		panel_indetificar.add(lblTelefone);
 		
-		JLabel lblNumeroTel = new JLabel("Telefones");
-		lblNumeroTel.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNumeroTel.setBounds(12, 68, 75, 15);
-		panel.add(lblNumeroTel);
+		tf_Telefone = new JTextField();
+		tf_Telefone.setColumns(10);
+		tf_Telefone.setBounds(108, 72, 148, 20);
+		panel_indetificar.add(tf_Telefone);
 		
-		tf_telefonefornecedor = new JTextField();
-		tf_telefonefornecedor.setColumns(10);
-		tf_telefonefornecedor.setBounds(105, 68, 128, 19);
-		panel.add(tf_telefonefornecedor);
+		JPanel panel_endereço = new JPanel();
+		panel_endereço.setBackground(new Color(238, 238, 238));
+		panel_endereço.setBounds(301, 11, 597, 124);
+		add(panel_endereço);
+		panel_endereço.setLayout(null);
 		
-		JLabel lblFornecedor = new JLabel("Fornecedor");
-		lblFornecedor.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFornecedor.setBounds(12, 2, 221, 15);
-		panel.add(lblFornecedor);
-		table = new JTable();
-		table.setBounds(0,0,886,513);
-		defineTabela();
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(12, 123, 886, 513);
-		add(scrollPane);
+		JLabel lblLogradouro = new JLabel("Logradouro:");
+		lblLogradouro.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblLogradouro.setBounds(10, 20, 95, 14);
+		panel_endereço.add(lblLogradouro);
 		
-		JButton btnSalvarRelatorio = new JButton("Salvar relatório");
-		btnSalvarRelatorio.addActionListener(new ActionListener() {
+		JLabel lblNumero = new JLabel("Numero:");
+		lblNumero.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNumero.setBounds(425, 20, 81, 14);
+		panel_endereço.add(lblNumero);
+		
+		JLabel lblComplemento = new JLabel("Complemento:");
+		lblComplemento.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblComplemento.setBounds(10, 53, 113, 14);
+		panel_endereço.add(lblComplemento);
+		
+		JLabel lblCidade = new JLabel("Cidade:");
+		lblCidade.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCidade.setBounds(20, 84, 67, 14);
+		panel_endereço.add(lblCidade);
+		
+		JLabel lblNewLabel_4 = new JLabel("Cep:");
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel_4.setBounds(426, 84, 32, 14);
+		panel_endereço.add(lblNewLabel_4);
+		
+		JLabel lblBairro = new JLabel("Bairro:");
+		lblBairro.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblBairro.setBounds(325, 53, 62, 14);
+		panel_endereço.add(lblBairro);
+		
+		JLabel lblEstado = new JLabel("Estado:");
+		lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblEstado.setBounds(217, 84, 67, 14);
+		panel_endereço.add(lblEstado);
+		
+		tf_Logradouro = new JTextField();
+		tf_Logradouro.setBounds(115, 18, 315, 20);
+		panel_endereço.add(tf_Logradouro);
+		tf_Logradouro.setColumns(10);
+		
+		tf_Numero = new JTextField();
+		tf_Numero.setColumns(10);
+		tf_Numero.setBounds(511, 18, 67, 20);
+		panel_endereço.add(tf_Numero);
+		
+		tf_Complemento = new JTextField();
+		tf_Complemento.setColumns(10);
+		tf_Complemento.setBounds(125, 51, 188, 20);
+		panel_endereço.add(tf_Complemento);
+		
+		tf_Cidade = new JTextField();
+		tf_Cidade.setColumns(10);
+		tf_Cidade.setBounds(100, 81, 113, 20);
+		panel_endereço.add(tf_Cidade);
+		
+		tf_Estado = new JTextField();
+		tf_Estado.setColumns(10);
+		tf_Estado.setBounds(291, 81, 113, 20);
+		panel_endereço.add(tf_Estado);
+		
+		tf_Bairro = new JTextField();
+		tf_Bairro.setColumns(10);
+		tf_Bairro.setBounds(392, 51, 186, 20);
+		panel_endereço.add(tf_Bairro);
+		
+		tf_Cep = new JTextField();
+		tf_Cep.setColumns(10);
+		tf_Cep.setBounds(465, 81, 113, 20);
+		panel_endereço.add(tf_Cep);
+		
+		JButton btnSalvarRelatrio = new JButton("Salvar relatório");
+		btnSalvarRelatrio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				geraDocumento();
 			}
 		});
-		btnSalvarRelatorio.setBounds(742, 648, 156, 25);
-		add(btnSalvarRelatorio);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setBounds(467, 12, 237, 99);
-		add(panel_1);
-		
-		JLabel lblCods = new JLabel("CODs");
-		lblCods.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCods.setBounds(12, 24, 70, 15);
-		panel_1.add(lblCods);
-		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(162, 10, -67, 15);
-		panel_1.add(textField_1);
-		
-		tf_cods = new JTextField();
-		tf_cods.setColumns(10);
-		tf_cods.setBounds(100, 24, 128, 19);
-		panel_1.add(tf_cods);
-		
-		JLabel lblNomeProd = new JLabel("Nomes");
-		lblNomeProd.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNomeProd.setBounds(12, 46, 70, 15);
-		panel_1.add(lblNomeProd);
-		
-		tf_nomes = new JTextField();
-		tf_nomes.setColumns(10);
-		tf_nomes.setBounds(100, 46, 128, 19);
-		panel_1.add(tf_nomes);
-		
-		JLabel lblMarcaProd = new JLabel("Marcas");
-		lblMarcaProd.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblMarcaProd.setBounds(12, 68, 70, 15);
-		panel_1.add(lblMarcaProd);
-		
-		tf_marcas = new JTextField();
-		tf_marcas.setColumns(10);
-		tf_marcas.setBounds(100, 68, 128, 19);
-		panel_1.add(tf_marcas);
-		
-		JLabel lblProduto = new JLabel("Produto");
-		lblProduto.setHorizontalAlignment(SwingConstants.CENTER);
-		lblProduto.setBounds(12, 2, 251, 15);
-		panel_1.add(lblProduto);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(716, 12, 182, 99);
-		add(panel_2);
-		panel_2.setLayout(null);
-		
-		JLabel lblEstoque = new JLabel("Qnt. Estoque");
-		lblEstoque.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEstoque.setBounds(12, 2, 158, 15);
-		panel_2.add(lblEstoque);
-		
-		tf_estoquemin = new JTextField();
-		tf_estoquemin.setBounds(54, 29, 116, 19);
-		panel_2.add(tf_estoquemin);
-		tf_estoquemin.setColumns(10);
-		
-		JLabel lblMin = new JLabel("Min:");
-		lblMin.setBounds(12, 29, 39, 15);
-		panel_2.add(lblMin);
-		
-		JLabel lblMax = new JLabel("Max:");
-		lblMax.setBounds(11, 60, 39, 15);
-		panel_2.add(lblMax);
-		
-		tf_estoquemax = new JTextField();
-		tf_estoquemax.setColumns(10);
-		tf_estoquemax.setBounds(53, 60, 117, 19);
-		panel_2.add(tf_estoquemax);
+		btnSalvarRelatrio.setBounds(745, 652, 144, 23);
+		add(btnSalvarRelatrio);
+		table = new JTable();
+		table.setBackground(new Color(255,255,255));
+		table.setBounds(0, 0, 874, 492);
+		defineTabela();
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(10, 146, 888, 492);
+		add(scrollPane);
 		
 		JButton btnPesquisar = new JButton("Pesquisar");
 		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int quantmin =0;
-				int quantmax =0;
-				try {
-					if(!tf_estoquemin.getText().equals("")){
-						quantmin = Integer.parseInt(tf_estoquemin.getText());
-					}
-					if(!tf_estoquemax.getText().equals("")){
-						quantmax = Integer.parseInt(tf_estoquemax.getText());
-					}
-					produtosComFornecedores = ProdutofornecedorDAO.pesquisaRelatorio(tf_cnpjs.getText(), tf_nomeFornecedor.getText(), tf_telefonefornecedor.getText(), tf_estados.getText(), tf_cidades.getText(), tf_cods.getText(),tf_nomes.getText(),tf_marcas.getText(),quantmin,quantmax);
-					preencheouEsvazia();
-				} catch (Exception fkk) {
-					JOptionPane.showMessageDialog(null, "Preencha corretamente os campos.");
-				}
-				
-				
-				
 			}
 		});
-		btnPesquisar.setBounds(613, 648, 117, 25);
+		btnPesquisar.setBounds(590, 652, 131, 23);
 		add(btnPesquisar);
 		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(267, 12, 188, 99);
-		add(panel_3);
-		panel_3.setLayout(null);
-		
-		JLabel lblLocal = new JLabel("Local");
-		lblLocal.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLocal.setBounds(12, 2, 164, 15);
-		panel_3.add(lblLocal);
-		
-		tf_estados = new JTextField();
-		tf_estados.setBounds(80, 29, 96, 19);
-		panel_3.add(tf_estados);
-		tf_estados.setColumns(10);
-		
-		JLabel lblEstados = new JLabel("Estados");
-		lblEstados.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblEstados.setBounds(12, 29, 62, 15);
-		panel_3.add(lblEstados);
-		
-		tf_cidades = new JTextField();
-		tf_cidades.setColumns(10);
-		tf_cidades.setBounds(80, 60, 96, 19);
-		panel_3.add(tf_cidades);
-		
-		JLabel lblCidades = new JLabel("Cidades");
-		lblCidades.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCidades.setBounds(12, 60, 62, 15);
-		panel_3.add(lblCidades);
-    }
+		/** tf_Cnpj
+		 * tf_Razaosocial
+		 * tf_Telefone
+		 * tf_Logradouro
+		 * tf_Numero
+		 * tf_Complemento
+		 * tf_Bairro
+		 * tf_Cidade
+		 * tf_Estado
+		 * tf_Cep
+		 */
+
+	}
 	public void defineTabela(){
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		model.addColumn("CNPJ");
-		model.addColumn("Nome");
-		model.addColumn("Cidade");
+		model.addColumn("Cnpj");
+		model.addColumn("Razaosocial");
+		model.addColumn("Telefone");
+		model.addColumn("Logradouro");
+		model.addColumn("Numero");
+		model.addColumn("Complemento");
+		model.addColumn("Bairro");
+		model.addColumn("Cidade");	
 		model.addColumn("Estado");
-		model.addColumn("id");
-		model.addColumn("Nome Prod.");
-		model.addColumn("Qnt. Est.");
-		table.getColumnModel().getColumn(0).setPreferredWidth(133);
-		table.getColumnModel().getColumn(1).setPreferredWidth(163);
-		table.getColumnModel().getColumn(2).setPreferredWidth(106);
-		table.getColumnModel().getColumn(3).setPreferredWidth(106);
-		table.getColumnModel().getColumn(4).setPreferredWidth(106);
-		table.getColumnModel().getColumn(5).setPreferredWidth(166);
-		table.getColumnModel().getColumn(6).setPreferredWidth(106);
+		model.addColumn("Cep");
+		table.getColumnModel().getColumn(0).setPreferredWidth(87);
+		table.getColumnModel().getColumn(1).setPreferredWidth(87);
+		table.getColumnModel().getColumn(2).setPreferredWidth(87);
+		table.getColumnModel().getColumn(3).setPreferredWidth(87);
+		table.getColumnModel().getColumn(4).setPreferredWidth(87);
+		table.getColumnModel().getColumn(5).setPreferredWidth(87);
+		table.getColumnModel().getColumn(6).setPreferredWidth(87);
+		table.getColumnModel().getColumn(7).setPreferredWidth(87);
+		table.getColumnModel().getColumn(8).setPreferredWidth(87);
+		table.getColumnModel().getColumn(9).setPreferredWidth(88);
+		
 	}
-	public void preencheouEsvazia() {
+	public void preencheouEsvazia(boolean preenche) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		for(int i = 0;i<model.getRowCount();i++){
 			model.removeRow(0);
 		}
 		model.setRowCount(0);
-			// Populate the table with the items			
-			for (Produtofornecedor prd : produtosComFornecedores) {
-				model.addRow(new Object[]{prd.getFornecedor_cnpj(),prd.getFornecedorNome(),prd.getFornecedorCidade(),prd.getFornecedorEstado(),prd.getProduto_cod(),prd.getProdutoNome(),prd.getProdutoEstoque()});
-			}		
+		
+		if (preenche) {
+			// Populate the table with the items
+			for (Fornecedor forn : Fornecedores) {
+				model.addRow(new Object[]{forn.getCnpj(),forn.getRazaosocial(),forn.getTelefone(),forn.getLogradouro(),forn.getNumero(),forn.getComplemento(),forn.getBairro(),forn.getCidade(),forn.getEstado(),forn.getCep()});
+			}
+		}
+	}
+	public void geraDocumento(){
+		
 	}
 }
-
-

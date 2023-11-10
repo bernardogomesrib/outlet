@@ -152,4 +152,9 @@ ENGINE = InnoDB; */
         }
         return fr;
     }
+    public static ArrayList<Fornecedor>consultaFornecedores(String cnpjs,String razao,String telefone, String logradouro, String numero,String complemento,String bairro,String cidade,String estado,String cep){
+        ArrayList<Fornecedor>fr = new ArrayList<>();
+
+        return fr;
+    }
 }
