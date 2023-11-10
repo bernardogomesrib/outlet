@@ -144,26 +144,27 @@ ENGINE = InnoDB;
         ArrayList<Venda> vn = new ArrayList<Venda>();
         String sql = "SELECT venda.numero, pedido.cliente_cpf, venda.formapagamento, venda.data, venda.total FROM venda JOIN pedido ON venda.pedido_id = pedido.id WHERE";
         if(!ids.equals("")){
-            ids = "numero IN ("+ids+") AND ";
+            ids = " numero IN ("+ids+") AND ";
         }
         if(!cpfs.equals("")){
-            cpfs = "pedido.cliente_cpf IN("+converteCPF(cpfs)+") AND ";
+            cpfs = " pedido.cliente_cpf IN("+converteCPF(cpfs)+") AND ";
         }
         if(!formaspgmnt.equals("")){
             formaspgmnt = likeXorY(formaspgmnt, "venda.formapagamento");
         }
         if(!datamin.equals("")){
-            datamin = "venda.data >="+datamin+" AND ";
+            datamin = " venda.data >="+datamin+" AND ";
         }
         
         if(!datamax.equals("")){
-            datamin+= "venda.data <="+datamax+" AND ";
+            datamin+= " venda.data <="+datamax+" AND ";
         }
-        String total = "venda.total >= "+totalmin;
+        String total = " venda.total >= "+totalmin;
         if(totalmax>0){
             total+= " AND venda.total <= "+totalmax;
         }
         sql += ids+cpfs+formaspgmnt+datamin+total;
+        System.out.println(sql);
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();

@@ -1,5 +1,7 @@
 package ENTIDADES;
 
+import java.text.DecimalFormat;
+
 public class Venda {
     /*private String 
      *  -----------------------------------------------------
@@ -89,6 +91,10 @@ ENGINE = InnoDB;
     }
     public void setTotal(double total) {
         this.total = total;
+    }
+    public String getTotalf(){
+        DecimalFormat df = new DecimalFormat("0.00");
+        return "R$ "+df.format(this.total);
     }
     public String getPedido_id() {
         return pedido_id;

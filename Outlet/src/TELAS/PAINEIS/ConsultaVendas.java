@@ -3,12 +3,20 @@ package TELAS.PAINEIS;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import DAO.VendaDAO;
+import ENTIDADES.Venda;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 
@@ -22,7 +30,8 @@ public class ConsultaVendas extends JPanel {
 	private JTextField tf_formaspgmt;
 	private JTextField tf_totalmin;
 	private JTextField tf_totalmax;
-	
+	private ArrayList<Venda> vendas = new ArrayList<Venda>();
+	private JTable table;
 	
 	/**
 	 * Create the panel.
@@ -76,8 +85,10 @@ public class ConsultaVendas extends JPanel {
 		tf_formaspgmt.setColumns(10);
 		tf_formaspgmt.setBounds(162, 66, 128, 19);
 		panel.add(tf_formaspgmt);
-		
-		JScrollPane scrollPane = new JScrollPane();
+		table = new JTable();
+		table.setBounds(0,0,886,513);
+		defineTabela();
+		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(12, 123, 886, 513);
 		add(scrollPane);			
 		
@@ -144,6 +155,21 @@ public class ConsultaVendas extends JPanel {
 		JButton btnPesquisar = new JButton("Pesquisar");
 		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					double totalmin = 0;
+					double totalmax = 0;
+					if(!tf_totalmax.getText().equals("")){
+						totalmax = Double.parseDouble(tf_totalmax.getText());
+					}
+					if(!tf_totalmin.getText().equals("")){
+						totalmin = Double.parseDouble(tf_totalmin.getText());
+					}
+					vendas = VendaDAO.relatorioVenda(tf_numeros.getText(), tf_cpfs.getText(), tf_formaspgmt.getText(), tf_datamin.getText(), tf_datamax.getText(), totalmin, totalmax);	
+					preencheouEsvazia();
+				} catch (Exception zzz) {
+					JOptionPane.showMessageDialog(null, zzz.getMessage());
+				}
+				
 			}
 		});
 		btnPesquisar.setBounds(765, 12, 133, 99);
@@ -156,7 +182,31 @@ public class ConsultaVendas extends JPanel {
 		});
 		btnSalvarRelatorio.setBounds(742, 648, 156, 25);
 		add(btnSalvarRelatorio);
-    }	
+    }
+	public void defineTabela(){
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.addColumn("ID Venda");
+		model.addColumn("CPF cliente");
+		model.addColumn("Form. PGT.");
+		model.addColumn("data");
+		model.addColumn("Total");
+		table.getColumnModel().getColumn(0).setPreferredWidth(177);
+		table.getColumnModel().getColumn(1).setPreferredWidth(177);
+		table.getColumnModel().getColumn(2).setPreferredWidth(177);
+		table.getColumnModel().getColumn(3).setPreferredWidth(178);
+		table.getColumnModel().getColumn(4).setPreferredWidth(177);
+	}
+	public void preencheouEsvazia(){
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		for(int i = 0;i<model.getRowCount();i++){
+			model.removeRow(0);
+		}
+		model.setRowCount(0);
+			// Populate the table with the items			
+			for (Venda prd : vendas) {
+				model.addRow(new Object[]{prd.getNumero(),prd.getCliente_cpf(),prd.getFormapagamento(),prd.getData(false),prd.getTotalf()});
+			}	
+	}
 }
 
 
