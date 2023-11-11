@@ -1,4 +1,4 @@
-package TELAS;
+package TELAS.PAINEIS;
 
 import ENTIDADES.Fornecedor;
 
@@ -35,7 +35,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 
-public class PanelTeste extends JPanel {
+public class ConsultaFornecedores extends JPanel {
 		
 	private JLayeredPane layeredPane;
 	private JTextField tf_Cnpj;
@@ -59,7 +59,7 @@ public class PanelTeste extends JPanel {
 		
 	}
 	
-	public PanelTeste(JLayeredPane layeredPane) {
+	public ConsultaFornecedores(JLayeredPane layeredPane) {
 			this.layeredPane = layeredPane;			
 
 			setBounds(0, 0, 910, 686);		

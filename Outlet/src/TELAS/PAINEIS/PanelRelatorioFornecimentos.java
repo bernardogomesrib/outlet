@@ -11,11 +11,22 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.commons.exceptions.ITextException;
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+
 import DAO.ProdutofornecedorDAO;
 import ENTIDADES.Produtofornecedor;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
@@ -104,6 +115,7 @@ public class PanelRelatorioFornecimentos extends JPanel {
 		JButton btnSalvarRelatorio = new JButton("Salvar relatório");
 		btnSalvarRelatorio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				geraDocumento();
 			}
 		});
 		btnSalvarRelatorio.setBounds(742, 648, 156, 25);
@@ -264,6 +276,48 @@ public class PanelRelatorioFornecimentos extends JPanel {
 			for (Produtofornecedor prd : produtosComFornecedores) {
 				model.addRow(new Object[]{prd.getFornecedor_cnpj(),prd.getFornecedorNome(),prd.getFornecedorCidade(),prd.getFornecedorEstado(),prd.getProduto_cod(),prd.getProdutoNome(),prd.getProdutoEstoque()});
 			}		
+	}
+	public void geraDocumento(){
+		String html = "<!DOCTYPE html><html lang='pt-br'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body><style>table{width: 99%;}th{background-color: gray;}.cn{background-color: aqua;}table, th, td {border: 1px solid black;border-collapse: collapse;}h1{text-align: center;}</style><h1>Relatório de Fornecimentos</h1><table><thead><tr><th>CNPJ</th><th>Nome</th><th>Cidade</th><th>Estado</th><th>id</th><th>Nome Prod</th><th>Qnt. Est</th></tr></thead><tbody>";
+
+		try {
+			boolean corsin= true;
+			for (Produtofornecedor prd : produtosComFornecedores) {
+				if (corsin) {
+					html+= "<tr>";
+					html+="<td>"+prd.getFornecedor_cnpj()+"</td><td>"+prd.getFornecedorNome()+"</td><td>"+prd.getFornecedorCidade()+"</td><td>"+prd.getFornecedorEstado()+"</td><td>"+prd.getProduto_cod()+"</td><td>"+prd.getProdutoNome()+"</td><td>"+prd.getProdutoEstoque()+"</td></tr>";
+				
+					corsin=!corsin;
+				}else{
+					html+= "<tr class = 'cn'>";
+					html+="<td>"+prd.getFornecedor_cnpj()+"</td><td>"+prd.getFornecedorNome()+"</td><td>"+prd.getFornecedorCidade()+"</td><td>"+prd.getFornecedorEstado()+"</td><td>"+prd.getProduto_cod()+"</td><td>"+prd.getProdutoNome()+"</td><td>"+prd.getProdutoEstoque()+"</td></tr>";
+					corsin=!corsin;
+				}
+			}
+			html+="</tbody></table></body></html>";
+			// cria arquivo temporario
+			File arquivo = File.createTempFile("arquivoTemp", ".html");
+			// Cria um FileWriter para o arquivo
+			FileWriter writer = new FileWriter(arquivo);
+
+			// Escreve a String no arquivo
+			writer.write(html);
+			
+			// Fecha o FileWriter
+			writer.close();
+
+			// Cria um novo documento PDF com tamanho de página paisagem
+			PdfWriter pdfWriter = new PdfWriter("RelatorioFornecimento.pdf");
+			PdfDocument pdfDoc = new PdfDocument(pdfWriter);
+			pdfDoc.setDefaultPageSize(PageSize.A4.rotate());
+
+			// Converte a string HTML para PDF
+			ConverterProperties props = new ConverterProperties();
+			HtmlConverter.convertToPdf(new FileInputStream(arquivo), pdfDoc, props);
+			
+		} catch (IOException|ITextException erro_consulta_cliente) {
+				JOptionPane.showMessageDialog(null, erro_consulta_cliente.getMessage());
+		}
 	}
 }
 

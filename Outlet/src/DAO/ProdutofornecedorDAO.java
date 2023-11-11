@@ -156,7 +156,7 @@ ENGINE = InnoDB;
         }
         sql +=cnpjs+nomesfornecedor+telefones+estados+cidades+cods+nomesprod+marcas+quantminstr;
         try {
-            System.out.println(sql);
+            
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {

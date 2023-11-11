@@ -102,9 +102,20 @@ ENGINE = InnoDB; */
         }
         return vl;
     }
-    public static Pedido buscaClienteDoPedido(String id){
+    public static Pedido buscaClienteDoPedido(String id,boolean ehgerenciamentoPedido){
         Pedido pedido = new Pedido();
         try {
+
+            String teste = "SELECT 1 FROM venda WHERE pedido_id = "+id;                        
+            
+            if(ehgerenciamentoPedido){
+                ps = con.prepareStatement(teste);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    JOptionPane.showMessageDialog(null, "O pedido já foi finalizado.");
+                    return pedido;
+                }
+            }
             String sql = "select id,data,cliente_cpf from pedido where id = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, id);

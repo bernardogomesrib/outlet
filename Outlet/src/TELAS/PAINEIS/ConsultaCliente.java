@@ -97,7 +97,6 @@ public class ConsultaCliente extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String cidade = tf_CidadeClienteConsulta.getText();
 				String estado =(String) cb_EstadoClienteConsulta.getSelectedItem();
-				System.out.println(cidade+"é a cidade selecionada e "+estado+" é o estado");
 				clienteComEnderecos = ClienteComEnderecoDAO.buscar(cidade,estado);
 				if(clienteComEnderecos.size()>=1){
 					preencheouEsvazia(true);

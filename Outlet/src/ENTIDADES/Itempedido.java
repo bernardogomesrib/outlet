@@ -79,9 +79,7 @@ ENGINE = InnoDB;
       this.subtotal = subtotal;
     }
     public void addMaisQuantidade(int quantidad){
-      System.out.println(quantidad);
       this.quantidade+=quantidad;
-      System.out.println(this.quantidade+" é a quantidade mais "+this.valor);
       this.subtotal = this.quantidade*this.valor;
     }
 }

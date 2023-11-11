@@ -214,7 +214,7 @@ public class PanelCliente extends JPanel {
 					try {
 						endereco = EnderecoDAO.buscaEnderecosDoCLiente(cliente.getCpf()).get(0);
 					} catch (Exception zzz) {
-						System.out.println("pipipo");
+						JOptionPane.showMessageDialog(null, zzz.getMessage());
 					}
 					apagaOudefine(false);
 				}
@@ -297,9 +297,9 @@ public class PanelCliente extends JPanel {
 		try {			
 			cliente.setDatanascimento(sdf1.format(dt_DataNascimentoCliente.getDate()),true);
 		} catch (Exception e) {
-			System.out.println("erro na data");
+			JOptionPane.showMessageDialog(null,e.getMessage());
 		}
-		System.out.println(cliente.getDatanascimento(false));
+		
 		cliente.setEmail(tf_EmailCliente.getText());
 		cliente.setTelefone(ftf_TelefoneCliente.getText());
 		endereco.setLogradouro(tf_LogradouroCliente.getText());

@@ -34,8 +34,7 @@ public class RelatorioPedidoDAO {
             cpf = " pedido.cliente_cpf in ("+converteCPF(cpf)+") AND ";
         }
         String data= "";
-        if(!datamin.equals("")){
-            System.out.println("não era pa ta chegano aqui");
+        if(!datamin.equals("")){            
             data= " pedido.data >= '"+ converte(datamin)+"' AND ";
         }else{
             data+="";
@@ -70,7 +69,7 @@ public class RelatorioPedidoDAO {
         query += cpf+data+cods+quantInd+conc+totprod+subttl;
         try {
             stmt = con.prepareStatement(query);
-            System.out.println(query);
+            
             rs = stmt.executeQuery();
             while(rs.next()){
                 pr.add(new ConsultaPedido(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getInt(6),rs.getString(7)));
@@ -98,7 +97,7 @@ public class RelatorioPedidoDAO {
         }
         String data= "";
         if(!datamin.equals("")){
-            System.out.println("não era pa ta chegano aqui");
+            
             data= " pedido.data >= '"+ converte(datamin)+"' AND ";
         }else{
             data+="";
@@ -131,7 +130,7 @@ public class RelatorioPedidoDAO {
         query += cpf+data+cods+quantInd+conc+totprod+subttl;
         try {
             stmt = con.prepareStatement(query);
-            System.out.println(query);
+            
             rs = stmt.executeQuery();
             while(rs.next()){
                 pr.add(new ConsultaPedido(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5), rs.getInt(6),rs.getString(7)));
@@ -142,11 +141,9 @@ public class RelatorioPedidoDAO {
         return pr;
     }
     public static String converte(String data){
-        System.out.println(data);
+        
         String[] aux = data.split("/");
-        for (String string : aux) {
-            System.out.println(string);
-        }
+    
         data = aux[2]+"-"+aux[1]+"-"+aux[0];
         return data;
     }

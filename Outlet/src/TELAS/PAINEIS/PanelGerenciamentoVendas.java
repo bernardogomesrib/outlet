@@ -107,7 +107,7 @@ public class PanelGerenciamentoVendas extends JPanel {
 							subtotal = PedidoDAO.pegaSubtotalDePedido(tf_idpedido.getText());							
 						}
 					} catch (Exception zz) {
-							System.out.println(zz.getMessage());
+						JOptionPane.showMessageDialog(null, zz.getMessage());
 					}
 					
 					lblValorDoPedido.setText("Valor do pedido : R$ "+df.format(subtotal));
@@ -138,7 +138,7 @@ public class PanelGerenciamentoVendas extends JPanel {
 							subtotal = PedidoDAO.pegaSubtotalDePedido(tf_idpedido.getText());							
 						}
 					} catch (Exception zz) {
-							System.out.println(zz.getMessage());
+						JOptionPane.showMessageDialog(null, zz.getMessage());
 					}
 					lblValorDoPedido.setText("Valor do pedido : R$ "+df.format(subtotal));
 					desconto = ((1-(desconto/100))*subtotal);

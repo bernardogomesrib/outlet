@@ -150,7 +150,7 @@ ENGINE = InnoDB;
             cpfs = " pedido.cliente_cpf IN("+converteCPF(cpfs)+") AND ";
         }
         if(!formaspgmnt.equals("")){
-            formaspgmnt = likeXorY(formaspgmnt, "venda.formapagamento");
+            formaspgmnt = likeXorY(formaspgmnt, " venda.formapagamento")+" AND ";
         }
         if(!datamin.equals("")){
             datamin = " venda.data >="+datamin+" AND ";
@@ -164,7 +164,6 @@ ENGINE = InnoDB;
             total+= " AND venda.total <= "+totalmax;
         }
         sql += ids+cpfs+formaspgmnt+datamin+total;
-        System.out.println(sql);
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();

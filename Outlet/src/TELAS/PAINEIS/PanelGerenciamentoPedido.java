@@ -170,7 +170,7 @@ public class PanelGerenciamentoPedido extends JPanel {
 						trueNum+=""+b;
 						item.setQuantidade(Integer.parseInt(trueNum));
 					} catch (Exception yyys) {
-						System.out.println(yyys.getMessage());		
+						JOptionPane.showMessageDialog(null, yyys.getMessage());		
 					}
 				}
 				tf_quantidade.setText(trueNum);
@@ -304,7 +304,7 @@ public class PanelGerenciamentoPedido extends JPanel {
 						item.setValor(Double.parseDouble(""+produto.getPreco()));					
 						int qnt = item.getQuantidade();
 						double vl = item.getValor();
-						System.out.println("quantidade: "+qnt+"\nValor: "+vl);
+						
 						int local = procurapeloid(item.getProduto_cod());
 						if(!(item.getQuantidade()==0)){							
 							if(-9999 == local){
@@ -342,7 +342,7 @@ public class PanelGerenciamentoPedido extends JPanel {
 		});
 		btnProcurar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pedido = PedidoDAO.buscaClienteDoPedido(pedido.getId());
+				pedido = PedidoDAO.buscaClienteDoPedido(pedido.getId(),true);
 				pedidoNaTela();
 				itens = ItempedidoDAO.buscaItensDoPedido(pedido.getId());
 				if(itens.size()!=0){

@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 
 import DATABASE.Conexao;
 import TELAS.PAINEIS.ConsultaCliente;
+import TELAS.PAINEIS.ConsultaFornecedores;
 import TELAS.PAINEIS.ConsultaProduto;
 import TELAS.PAINEIS.ConsultaVendas;
 import TELAS.PAINEIS.PanelCliente;
@@ -53,7 +54,7 @@ public class TelaInicial extends JFrame {
 	PanelGerenciamentoVendas panelGerenciamentoVendas = new PanelGerenciamentoVendas(layeredPane);
 	PanelGerenciarFornecimentos panelGerenciarFornecimentos = new PanelGerenciarFornecimentos(layeredPane);
 	PanelRelatorioFornecimentos panelRelatorioFornecimentos = new PanelRelatorioFornecimentos(layeredPane);
-	PanelTeste panelTeste = new PanelTeste(layeredPane);
+	ConsultaFornecedores panelTeste = new ConsultaFornecedores(layeredPane);
 	ConsultaVendas consultaVendas = new ConsultaVendas(layeredPane);
 	/**
 	 * Launch the application.

@@ -200,7 +200,6 @@ public class PanelGerenciarFornecimentos extends JPanel {
 						}
 						produtos = ProdutoDao.procuraProdutos(txtProdutocod.getText(), txtProdutonome.getText(), false, txtMarca.getText(), false, precomin,precomax,quantmin,quantmax);	
 					} catch (Exception h) {
-						System.out.println(h.getMessage());  
 						JOptionPane.showMessageDialog(null,h.getMessage());
 					}
 					preencheouEsvaziaProduto(true);

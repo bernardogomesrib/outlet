@@ -92,9 +92,8 @@ public class PanelGerenciamentoProduto extends JPanel {
 				try {
 					prod.setPreco(Double.parseDouble(tf_preco.getText()));	
 				} catch (Exception x) {
-					System.out.println(x.getMessage());
+					JOptionPane.showMessageDialog(null,x.getMessage());
 				}
-				System.out.println(prod.getPreco());
 			}
 		});
 		tf_preco.setBounds(261, 213, 397, 20);
@@ -164,9 +163,8 @@ public class PanelGerenciamentoProduto extends JPanel {
 				try {
 					prod.setQuantidadeestoque(Integer.parseInt(tf_quantidadeestoque.getText()));
 				} catch (Exception t) {
-					System.out.println(t.getMessage());
-				}
-				System.out.println(prod.getQuantidadeestoque());
+					JOptionPane.showMessageDialog(null, t.getMessage());
+				}				
 			}
 		});
 		tf_quantidadeestoque.setColumns(10);

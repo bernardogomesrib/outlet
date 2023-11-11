@@ -149,7 +149,7 @@ ENGINE = InnoDB;
         for(int i= 0;i<tamanho;i++){
             item = itens.get(i);
             if(i == tamanho-1){
-                System.out.println(item.getValor());
+               
                 sql+="("+item.getPedido_id()+","+item.getProduto_cod()+","+item.getQuantidade()+",'"+produtos.get(i).getPreco()+"','"+item.getSubtotal()+"')";
             }else{
                 sql+="("+item.getPedido_id()+","+item.getProduto_cod()+","+item.getQuantidade()+",'"+produtos.get(i).getPreco()+"','"+item.getSubtotal()+"'),";

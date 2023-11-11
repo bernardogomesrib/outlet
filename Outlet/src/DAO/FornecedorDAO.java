@@ -140,7 +140,7 @@ ENGINE = InnoDB; */
             cnpj = " AND cnpj = '"+cnpj+"';";
         }
         sql+=nome+cnpj;
-        System.out.println(sql);
+        
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -154,7 +154,74 @@ ENGINE = InnoDB; */
     }
     public static ArrayList<Fornecedor>consultaFornecedores(String cnpjs,String razao,String telefone, String logradouro, String numero,String complemento,String bairro,String cidade,String estado,String cep){
         ArrayList<Fornecedor>fr = new ArrayList<>();
+        String sql = "SELECT * FROM fornecedor WHERE ";
+        if(!cnpjs.equals("")){
+            cnpjs = "  cnpj in ("+converteCPF(cnpjs)+") AND ";
+        }
+        if(!razao.equals("")){
+            razao = likeXorY(razao," razaosocial")+" AND ";
+        }
+        if(!telefone.equals("")){
+            telefone = " telefone in ("+converteCPF(telefone)+") AND ";
+        }
+        if(!logradouro.equals("")){
+            logradouro = likeXorY(logradouro, " logradouro")+" AND ";
+        }
+        if(!numero.equals("")){
+            numero = " numero in("+converteCPF(numero)+") AND";
+        }
+        if(!complemento.equals("")){
+            complemento = likeXorY(complemento, " complemento")+" AND ";
+        }
+        if(!bairro.equals("")){
+            bairro = likeXorY(bairro, " bairro")+" AND ";
+        }
+        if(!cidade.equals("")){
+            cidade = likeXorY(cidade, " cidade")+" AND ";
+        }
+        if(!estado.equals("")){
+            estado = likeXorY(estado, " estado")+" AND ";
+        }
+        if(!cep.equals("")){
+            cep = " cep in ("+converteCPF(cep)+") AND ";
+        }
+        sql +=cnpjs+razao+telefone+logradouro+numero+complemento+bairro+cidade+estado+cep+" 1=1 " ;
+       
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                fr.add(new Fornecedor(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)));
+            }
 
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,e.getMessage());
+        }
         return fr;
+    }
+    private static String converteCPF(String cpfs){
+        String[] aux = cpfs.split(",");
+        cpfs = "";
+        for (int i = 0; i<aux.length;i++) {
+            if(i==aux.length-1){
+                cpfs+="'"+aux[i]+"'";
+            }else{
+                cpfs+="'"+aux[i]+"', ";
+            }
+        }
+        return cpfs;
+    }
+    public static String likeXorY(String names,String tablenamedotcolumn){
+        String[]aux = names.split(",");
+        int tamanho = aux.length;
+        names = "";
+        for(int i = 0;i<tamanho;i++){
+            if(i==tamanho-1){
+                names+=tablenamedotcolumn+" LIKE '"+ aux[i]+"' ";
+            }else{
+                names+=tablenamedotcolumn+" LIKE '"+ aux[i]+"' OR ";
+            }
+        }
+        return names;
     }
 }
